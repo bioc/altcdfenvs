@@ -1,12 +1,24 @@
 ## Laurent Gautier 2003/2004
 
+
+index2xy.CdfEnvAffy <- function(object, i) {
+  indices2xy(i, nr = object@nrow)-1
+}
+xy2index.CdfEnvAffy <- function(object, x, y) {
+  xy2indices(x+1, y+1, nr = object@nrow)
+}
+
 setClass("CdfEnvAffy",
          representation(envir = "environment",
                         envName = "character",
+                        index2xy = "function",
+                        xy2index = "function",
                         nrow = "integer",
                         ncol = "integer",
                         probeTypes = "character",
-                        chipType = "character"))
+                        chipType = "character"),
+         prototype = list(index2xy = index2xy.CdfEnvAffy,
+           xy2index = xy2index.CdfEnvAffy))
 
 ## ---
 
@@ -62,22 +74,14 @@ setMethod("indexProbes", signature("CdfEnvAffy", which = "character"),
          indexProbes.CdfEnvAffy)
 
 ## ---
-
-index2xy.CdfEnvAffy <- function(object, i) {
-  indices2xy(i, nr = object@nrow)-1
-}
 setGeneric("index2xy", def = function(object, ...) standardGeneric("index2xy"))
 setMethod("index2xy", signature(object="CdfEnvAffy"),
-         index2xy.CdfEnvAffy)
+         function(object, ...) object@index2xy(object, ...))
 
 ## ---
-
-xy2index.CdfEnvAffy <- function(object, x, y) {
-  xy2indices(x+1, y+1, nr = object@nrow)
-}
 setGeneric("xy2index", def = function(object, ...) standardGeneric("xy2index"), useAsDefault = FALSE)
 setMethod("xy2index", signature(object="CdfEnvAffy"),
-          xy2index.CdfEnvAffy)
+          function(object, ...) object@xy2index(object, ...))
 
 ## ---
 
@@ -185,3 +189,11 @@ validAffyBatch <- function(abatch, cdfenv) {
 
   #return(r.dim)
 }
+
+
+## ---
+
+# setMethod("initialize", "CdfEnvAffy",
+#           function(.Object) {
+            
+#           })

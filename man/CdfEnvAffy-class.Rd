@@ -25,6 +25,14 @@ Typically, there is an instance of the class for each type of chip
       or gene names, and the values are indexes.}
     \item{\code{envName}:}{Object of class \code{"character"}. A name
       for the environment.}
+    \item{\code{index2xy}:}{Object of class \code{"function"}. The
+      function used to resolve index into xy coordinates. Unless you are
+    an advanced user, you probably want to ignore this (and rely on the
+    default provided with the package).}
+    \item{\code{xy2index}:}{Object of class \code{"function"}. The
+      function used to resolve xy coordinates into index. Unless you are
+    an advanced user, you probably want to ignore this (and rely on the
+    default provided with the package).}
     \item{\code{nrow}:}{Object of class \code{"integer"}. The number of
       rows of probes for the chip type.}
     \item{\code{ncol}:}{Object of class \code{"integer"}. The number of
