@@ -53,9 +53,9 @@ If you do not know these numbers for your chip, the easiest (for the
 moment) is to read CEL data in an \Rclass{AffyBatch} and call the function
 \Rfunction{print} on this object.
 
-\section*{How to create a CdfEnvAffy that is a subset the 2-genomes one}
+\section*{How to create a CdfEnvAffy that is a subset of the 2-genomes one}
 
-The identifiers starting with `Pf' correspond to plasmodium, it is an easy job
+If the identifiers starting with `Pf' correspond to plasmodium, it is an easy job
 to find them:
 <<>>=
 ids <- geneNames(planocdf)
@@ -67,8 +67,26 @@ Subsetting the \Rclass{CdfEnvAffy} is also an easy task:
 ## subset the object to only keep probe sets of interest
 plcdf <- planocdf[ids.pf]
 print(plcdf)
+@
+
+However, this is not that simple:{\bf the environment created does not contain all the probe
+set ids from Plasmodium}. Unfortunately, one cannot rely on pattern matching on the probe set
+id to find all the probe set ids associated with Plasmodium. 
+The list of plasmodium ids included in the package can let us build a Plasmodium-only
+CdfEnvAffy (contributed by Zhining Wang).
+<<>>=
+filename <- system.file("exampleData", "Plasmodium-Probeset-IDs.txt",
+                             package="altcdfenvs")
+ids.pf <- scan(file = filename, what = "")
+plcdf <- planocdf[ids.pf]
+print(plcdf)
 @ 
 
+Before we eventually save our environment, we may want to give it an explicit name:
+<<>>=
+plcdf@envName <- "Plasmodium ids only"
+print(plcdf)
+@ 
 \section*{Assign the new Cdf data to an AffyBatch}
 Handling of AffyCdfEnv directly in within an AffyBatch, or AffyBatch-like,
 structure is being completed\ldots in the meanwhile, the current mecanism

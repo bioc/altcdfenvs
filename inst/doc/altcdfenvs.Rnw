@@ -31,11 +31,11 @@
 \maketitle
 
 \section*{Introduction}
-With short oligonuleotide arrays, several probes are designed to match
-a target transcript. The probes matching the same target transcript
+On short oligonuleotide arrays, several probes are designed to match
+a target transcript, and probes matching the same target transcript
 can be grouped in a probe set. Between the time the probes for a given short
 oligonucleotide chip were designed, and the time an analysis is made,
-the knowledge of expected transcript might have changed.
+the knowledge of expected transcripts for a given organism might have changed.
 Unless one includes the latest development in transcripts into
 an analysis, the analysis could suffer from what could be nicknamed a
 {\it Dorian Gray} effect. The chip itself does not change, which means
@@ -48,6 +48,12 @@ the opportunity to minimize this effect.
 
 The package is directly usable with {\it Affymetrix GeneChip} short
 oligonucleotide arrays, and can be adapted or extended for other platforms.
+
+You can cite this work with:
+Laurent Gautier, Morten M{\o}ller, Lennart Friis-Hansen and
+Steen Knudsen. Alternative mapping of probes to genes for
+{\it Affymetrix} chips. 2004. BMC Bioinformatics (to appear).
+
 
 Let's start by loading the package:
 <<>>=
