@@ -1,3 +1,5 @@
+## Laurent Gautier 2003/2004
+
 setClass("CdfEnvAffy",
          representation(envir = "environment",
                         nrow = "integer",
@@ -40,14 +42,14 @@ setMethod("indexProbes", signature("CdfEnvAffy", which = "character"),
          indexProbes.CdfEnvAffy)
 
 index2xy.CdfEnvAffy <- function(object, i) {
-  indices2xy(i, nr = object@nrow)
+  indices2xy(i, nr = object@nrow)-1
 }
 setGeneric("index2xy", def = function(object, ...) standardGeneric("index2xy"), useAsDefault = FALSE)
 setMethod("index2xy", signature("CdfEnvAffy", "integer"),
          index2xy.CdfEnvAffy)
 
 xy2index.CdfEnvAffy <- function(object, x, y) {
-  xy2indices(x, y, nr = object@nrow)
+  xy2indices(x+1, y+1, nr = object@nrow)
 }
 setGeneric("xy2index", def = function(object, ...) standardGeneric("xy2index"), useAsDefault = FALSE)
 setMethod("xy2index", signature("CdfEnvAffy", "integer", "integer"),
@@ -140,7 +142,9 @@ validAffyBatch <- function(abatch, cdfenv) {
     valid <- FALSE
   else
     valid <- TRUE
-  
-    r.dim <- list(valid = valid)
-  
+
+  return(valid)
+    #r.dim <- list(valid = valid)
+
+  #return(r.dim)
 }

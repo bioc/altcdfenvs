@@ -6,14 +6,18 @@
 
 
 print.FASTA <- function(x, ...) {
-  print("FASTA sequence:", ...)
-  print(paste("  ", substr(x$header, 1, 60), "..."), ...)
-  print(paste("  ", substr(x$header, 1, 60), "..."), ...)
+  cat("FASTA sequence:\n", ...)
+  if (is.null(x$header)) {
+    cat("  NULL\n")
+  } else {
+    cat(paste("  ", substr(x$header, 1, 60), "...\n"), ...)
+    cat(paste("  ", substr(x$sequence, 1, 60), "...\n"), ...)
+  }
 }
 
-write.FASTA <- function(x, file="data.fasta", append=FALSE) {
-  cat(x$header, file=file, "\n", sep="", append=append)
-  cat(x$sequence, file=file, "\n", sep="", append=append)
+write.FASTA <- function(x, file="data.fasta", append = FALSE) {
+  cat(x$header, file = file, "\n", sep = "", append = append)
+  cat(x$sequence, file = file, "\n", sep = "", append = TRUE)
 }
 
 skip.FASTA.entry <- function(con, skip, linebreaks=3000) {
@@ -64,7 +68,6 @@ read.n.FASTA.entries.split <- function(con, n, linebreaks=3000) {
     seqs[i] <- fs$sequence
   }
   r <- list(headers=headers, sequences=seqs)
-  class(r) <- "FASTA"
   return(r)
 }
 
@@ -101,7 +104,8 @@ read.FASTA.entry <- function(con, linebreaks=3000) {
   }
   
   bioseq <- vector("list", length=linebreaks)
-  i <- 1
+  i <- as.integer(1)
+  one.integer <- as.integer(1)
   
   header <- getnext.FASTA.header(con)
   
@@ -115,12 +119,18 @@ read.FASTA.entry <- function(con, linebreaks=3000) {
     } else {
       bioseq[[i]] <- line
     }
-    i <- i+1
+    i <- i + one.integer
     line <- readLines(con, n=1)
   }
-  
-  return(list(header=header, sequence=paste(bioseq[1:(i-1)], collapse="")))
-  
+  if (identical(header, character(0))) {
+    header <- NULL
+    bioseq <- NULL
+  } else {
+    bioseq <- paste(bioseq[1 : (i-1)], collapse="")
+  }
+  r <- list(header=header, sequence=bioseq)
+  class(r) <- "FASTA"  
+  return(r)
 }
 
 grep.FASTA.entry <- function(pattern, con, ...) {
@@ -128,7 +138,7 @@ grep.FASTA.entry <- function(pattern, con, ...) {
   ##
   fs <- read.FASTA.entry(con)
   i <- 0
-  while (! identical(fs$header, character(0))) {
+  while (! identical(fs$header, NULL)) {
     i <- i + 1
     if (length(grep(pattern, fs$header, ...)) > 0)
       break

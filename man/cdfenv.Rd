@@ -1,6 +1,6 @@
 \name{cdfenvs}
-\alias{wrapCdfEnv}
-\alias{getCdfEnv}
+\alias{wrapCdfEnvAffy}
+\alias{getCdfEnvAffy}
 \alias{buildCdfEnv.matchprobes}
 \alias{CdfEnv}
 \title{ functions related to cdfenvs }
@@ -8,10 +8,12 @@
   A set of functions to handle cdfenvs
 }
 \usage{
-wrapCdfEnv(cdfenv, nrow.chip, ncol.chip, chiptype)
-getCdfEnv(abatch)
+wrapCdfEnvAffy(cdfenv, nrow.chip, ncol.chip, chiptype)
+getCdfEnvAffy(abatch)
 buildCdfEnv.matchprobes(matches, ids, probes.pack, abatch=NULL,
-                        nrow.chip=NULL, ncol.chip=NULL, chiptype=NULL, mm=NA)
+                        nrow.chip=NULL, ncol.chip=NULL, chiptype=NULL,
+                        mm=NA, simplify = TRUE,
+                        x.colname = "x", y.colname = "y")
 }
 \arguments{
   \item{abatch}{an \code{AffyBatch}}
@@ -24,6 +26,9 @@ buildCdfEnv.matchprobes(matches, ids, probes.pack, abatch=NULL,
   \item{ncol.chip}{The number of columns for the chip type}
   \item{nrow.chip}{The number of rows for the chip type}
   \item{probes.pack}{The name of the probe package}
+  \item{simplify}{Simplify the environment created by removing the ids
+    without any matching probe}
+  \item{x.colname, y.colname}{see the \code{getxy.probeseq}}
 }
 \details{
   The class \code{CdfEnv} is defined as S3 to ensure compatibility with

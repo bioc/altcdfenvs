@@ -1,0 +1,194 @@
+% -*- mode: noweb; noweb-default-code-mode: R-mode; -*-
+%\VignetteIndexEntry{affy primer}
+%\VignetteKeywords{Preprocessing, Affymetrix}
+%\VignetteDepends{altcdfenvs}
+%\VignettePackage{altcdfenvs}
+%documentclass[12pt, a4paper]{article}
+\documentclass[12pt]{article}
+
+\usepackage{amsmath,pstricks}
+\usepackage{hyperref}
+\usepackage[authoryear,round]{natbib}
+
+\textwidth=6.2in
+\textheight=8.5in
+%\parskip=.3cm
+\oddsidemargin=.1in
+\evensidemargin=.1in
+\headheight=-.3in
+
+\newcommand{\scscst}{\scriptscriptstyle}
+\newcommand{\scst}{\scriptstyle}
+\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Robject}[1]{{\texttt{#1}}}
+\newcommand{\Rclass}[1]{{\texttt{#1}}}
+\newcommand{\Rpackage}[1]{{\textit{#1}}}
+
+\author{Laurent Gautier}
+\title{Alternative CDF environments}
+
+\begin{document}
+\maketitle
+
+\section*{Introduction}
+With short oligonuleotide arrays, several probes are designed to match
+a target transcript. The probes matching the same target transcript
+can be grouped in a probe set. Between the time the probes for a given short
+oligonucleotide chip were designed, and the time an analysis is made,
+the knowledge of expected transcript might have changed.
+Unless one includes the latest development in transcripts into
+an analysis, the analysis could suffer from what could be nicknamed a
+{\it Dorian Gray} effect. The chip itself does not change, which means
+that the probes and their respective sequences remain the same, while
+the knowledge of the transcripts, and eventually their sequence, might
+evolve, and in time the immobility of the probe and probe sets give an
+uglier picture of the biological phenomena to study. Being able to
+easily modify or replace the grouping of probes in probe sets gives
+the opportunity to minimize this effect.
+
+The package is directly usable with {\it Affymetrix GeneChip} short
+oligonucleotide arrays, and can be adapted or extended for other platforms.
+
+Let's start by loading the package:
+<<>>=
+library(altcdfenvs)
+@ 
+
+\section*{The class \Rclass{CdfEnvAffy}}
+Each instance of this class contains a way to group probes in probe sets.
+Different instances, describing different ways to group probes in
+probe sets, can co-exist for a given chip type.
+
+When experimenting, it is highly recommended to use the functions \Rfunction{validCdfEnvAffy}
+and \Rfunction{validAffyBatch} to make sure that the instance fullfils basic requirements for consistency. 
+
+\section*{Reading sequence information in FASTA connections}
+The package contains simple functions to read {\bf R} connections in the FASTA
+format. Typically, collections of sequences are stored in FASTA files,
+which can be significantly large, one can wish to read and process sequences one after the other. This can
+be done by opening the file in `r' mode:
+<<>>=
+fasta.filename <- system.file("exampleData", "sample.fasta",
+                        package="altcdfenvs")
+con <- file(fasta.filename, open="r")
+@
+
+Reading the sequences one after another, and printing information
+about them in turn goes like:
+<<>>=
+fasta.seq <- read.FASTA.entry(con)
+while(! is.null(fasta.seq$header)) {
+  print(fasta.seq)
+  fasta.seq <- read.FASTA.entry(con)
+}
+close(con)
+@
+
+One can foresee that the matching of a set of reference sequences against
+all the probes can be parallelized easily: the reference sequences can
+simply be distributed across different processors/machines. When
+working with all the reference sequences in a single large FASTA file,
+the option \Rcode{skip} can let one implement a poor man's parallel sequence matching
+very easily.
+
+\section*{Creating an alternative mapping from sequences in a FASTA file}
+\subsection*{Select the constituting elements}
+\begin{itemize}
+\item Chip type:
+For this tutorial we decide to work with the Affymetrix chip HG-U133A.
+\item Target sequences:
+The set of target sequences we use for this tutorial is in the exemplar FASTA file:
+<<>>=
+## first, count the number of FASTA entries in our file
+con <- file(fasta.filename, open="r")
+n <- countskip.FASTA.entries(con)
+close(con)
+
+## read all the entries
+con <- file(fasta.filename, open="r")
+my.entries <- read.n.FASTA.entries.split(con, n)
+close(con)
+@ 
+
+\end{itemize}
+
+
+
+
+
+\subsection*{matching the probes}
+The package \Rpackage{matchprobes} and the probe data package for
+HG-U133A are required to perform the matching. The first step is
+to load them:
+<<>>=
+library(matchprobes)
+library(hgu133aprobe)
+
+@ 
+
+The matching is done simply (one can refer to the documentation for the
+package \Rpackage{matchprobes} for further details):
+<<>>=
+m <- matchprobes(my.entries$sequences, hgu133aprobe$sequence, probepos = TRUE)
+@ 
+
+If one wishes to have a graphical view on the matches, the package \Rpackage{splicegear}
+provides utilities to do so:
+<<fig=TRUE>>=
+library(splicegear)
+
+probes.length <- nchar(hgu133aprobe$sequence[[1]])
+
+p <- matchprobes2Probes(m, probes.length)
+
+plot(p[[1]])
+## or grid.plot(p[[1]])
+@ 
+
+The package contains a function to create a \Rclass{CdfEnv} from the matches:
+<<>>=
+get.unigeneIDs <- function(x) {
+reg <- regexpr("Hs#[^[:blank:]]+", x)
+r <- substr(my.entries$headers, reg, reg+attr(reg, "match.length")-1)
+return(r)
+}
+ids <- get.unigeneIDs(my.entries$headers)
+alt.cdf <- buildCdfEnv.matchprobes(m, ids, 
+                                   nrow.chip = 712, ncol.chip = 712, 
+                                   chiptype = "HG-U133A",
+                                   probes.pack = "hgu133aprobe")
+@ 
+Note that the physical specificities for the chip must be
+specified. This is currently a problem with cdfenvs as they are
+created by the package \Rpackage{makecdfenv}. The class
+\Rclass{CdfEnv} suggests a way to solve this (hopefully this will be
+integrated in \Rpackage{makecdfenv} in the near future).
+When this happens, the section below will be replaced by something
+more intuitive. But in the meanwhile, here is the current way to use
+our shiny brand new \Rclass{CdfEnv}:
+
+\begin{Scode}
+## say we have an AffyBatch of HG-U133A chips called 'abatch'
+
+## summary checks to avoid silly mistakes
+validAffyBatch(abatch, alt.cdf)
+
+## it is ok, so we proceed...
+
+## get the environment out of it class
+alt.cdfenv <- alt.cdf@envir
+
+abatch@cdfName <- "alt.cdfenv"
+\end{Scode}
+
+From now on, the object \Robject{abatch} will use our `alternative
+mapping' rather than the one provided by the manufacturer of the chip:
+
+\begin{Scode}
+print(abatch)
+\end{Scode}
+
+%\section*{Creating an alternative environment to store only perfect matches}
+
+
+\end{document}

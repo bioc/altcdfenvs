@@ -26,9 +26,9 @@ getCdfEnvAffy <- function(abatch) {
   return(cdfenv)
 }
 
-buildCdfEnv.matchprobes <- function(matches, ids, probes.pack, abatch=NULL, nrow.chip=NULL, ncol.chip=NULL, chiptype=NULL, mm=NA) {
+buildCdfEnv.matchprobes <- function(matches, ids, probes.pack, abatch=NULL, nrow.chip=NULL, ncol.chip=NULL, chiptype=NULL, mm=NA, simplify = TRUE, x.colname = "x", y.colname = "y") {
 
-  if (! (is.list(matches) && length(matches > 0) && length(matches < 3)))
+  if (! (is.list(matches) && length(matches) > 0) && length(matches[[1]]) < 3)
     stop("arg 'matches' should be a list a returned by matchprobes.")
 
   if (length(matches) != length(ids))
@@ -51,17 +51,22 @@ buildCdfEnv.matchprobes <- function(matches, ids, probes.pack, abatch=NULL, nrow
   cdfenv <- new.env(hash=TRUE)
 
   for (i in seq(along=matches$match)) {
-    xy <- getxy.probeseq(probeseq=probe.tab, i.row=matches$match[[i]])
+    xy <- getxy.probeseq(probeseq=probe.tab, i.row=matches$match[[i]],
+                         x.colname = x.colname, y.colname = y.colname)
+    if (nrow(xy) == 0 && simplify) {      
+      next
+    }
     assign(ids[i],
            cbind(xy2indices(xy[, 1], xy[, 2], nr=nrow.chip), mm),
            envir=cdfenv)
   }
   
-  cdfenv <- wrapCdfEnv(cdfenv, nrow.chip, ncol.chip, chiptype)  
+  cdfenv <- wrapCdfEnvAffy(cdfenv, nrow.chip, ncol.chip, chiptype)  
   return(cdfenv)  
 }
 
-getxy.probeseq <- function(ppset.id=NULL, probeseq=NULL, i.row=NULL, offset.one=TRUE) {
+getxy.probeseq <- function(ppset.id=NULL, probeseq=NULL, i.row=NULL, offset.one=TRUE,
+                           x.colname = "x", y.colname = "y") {
   if (sum(c(is.null(ppset.id), is.null(i.row))) != 1)
     stop("specify one and only one of 'ppset.id', 'i.row'")
 
@@ -72,7 +77,7 @@ getxy.probeseq <- function(ppset.id=NULL, probeseq=NULL, i.row=NULL, offset.one=
   mm.offset[i.row < 0] <- 1
   i.row <- abs(i.row)
   
-  xy <- cbind(probeseq$Probe.X[i.row], probeseq$Probe.Y[i.row] + mm.offset) + 1
+  xy <- cbind(probeseq[[x.colname]][i.row], probeseq[[y.colname]][i.row] + mm.offset) + 1
   colnames(xy) <- c("x", "y")
   return(xy)
 }

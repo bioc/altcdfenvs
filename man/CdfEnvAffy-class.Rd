@@ -4,6 +4,7 @@
 \alias{index2xy,CdfEnvAffy-method}
 \alias{indexProbes,CdfEnvAffy,character-method}
 \alias{plot,CdfEnvAffy,missing-method}
+\alias{show,CdfEnvAffy-method}
 \alias{xy2index,CdfEnvAffy-method}
 
 \title{Class "CdfEnvAffy"}
@@ -42,10 +43,10 @@ Typically, there is an instance of the class for each type of chip
 	"character", probeSetNames = NULL)}: obtain the indexes for the probes associated with
       the probe set name \code{probeSetNames}. When \code{probeSetNames}
       is set to \code{NULL} (default), the indexes are returned for the
-      probe sets defined on the chip.}
+      probe sets defined on the chip. See \code{indexProbes.CdfEnvAffy}}
     \item{plot}{\code{signature(x = "CdfEnvAffy", y = "missing")}: Plot
       the chip. It mainly sets coordinates for further plotting (see
-      examples).}
+      examples). See \code{plot.CdfEnvAffy}}
     \item{show}{\code{signature(object = "CdfEnvAffy")}: Print method.}
     \item{xy2index}{\code{signature(object = "CdfEnvAffy")}: convert XY
       coordinates into index values.}
@@ -57,10 +58,11 @@ Typically, there is an instance of the class for each type of chip
 
 % ~Make other sections like Warning with \section{Warning }{....} ~
 
-%\seealso{
-%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
+\seealso{
+  \code{\link{indexProbes.CdfEnvAffy}}, \code{\link{plot.CdfEnvAffy}}
+  %  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
 %  or \code{\link{CLASSNAME-class}} for links to other classes
-%}
+}
 \examples{
 ## build an instance
 library(hgu95acdf)
