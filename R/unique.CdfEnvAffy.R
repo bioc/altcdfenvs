@@ -30,9 +30,9 @@ unique.CdfEnvAffy <- function(x, incomparable=FALSE, simplify=TRUE, verbose=FALS
 
 
 countduplicated <- function(x, incomparable=FALSE, verbose=FALSE) {
-  if (!inherits(x, "CdfEnvAffy"))
+  if (!is(x, "CdfEnvAffy"))
     stop("x must inherit from 'CdfEnvAffy'")
-    
+
   if (incomparable != FALSE)
     warning("'incomparable' not yet implemented !")
 
@@ -48,7 +48,7 @@ countduplicated <- function(x, incomparable=FALSE, verbose=FALSE) {
   r <- new.env(hash = TRUE)
   if(verbose)
     cat("done.\nCounting probes...")
-  
+
   for (i in seq(along = ids)) {
     p.i <- get(ids[i], envir = tmp.env)
     tmp.count[p.i] <- tmp.count[p.i] + 1

@@ -18,11 +18,11 @@ wrapCdfEnvAffy <- function(cdfenv, nrow.chip, ncol.chip, chiptype) {
 }
 
 getCdfEnvAffy <- function(abatch) {
-  if (class(abatch) != "AffyBatch")
+  if (! is(abatch, "AffyBatch"))
     stop("arg must be of class 'AffyBatch'.")
 
   cdfenv <- getCdfInfo(abatch)
-  
+
   cdfenv <- wrapCdfEnvAffy(cdfenv, abatch@nrow, abatch@ncol, abatch@cdfName)
   return(cdfenv)
 }
@@ -41,7 +41,7 @@ buildCdfEnv.matchprobes <- function(matches, ids, probes.pack,
     stop("'matches' and 'ids' must have the same length.")
 
   if ( ! is.null(abatch)) {
-    if (class(abatch) != "AffyBatch")
+    if (! is(abatch, "AffyBatch"))
       stop("abatch must be of class 'AffyBatch'.")
     nrow.chip <- abatch@nrow
     ncol.chip <- abatch@ncol
@@ -50,7 +50,7 @@ buildCdfEnv.matchprobes <- function(matches, ids, probes.pack,
 
   if (is.null(nrow.chip) || is.null(ncol.chip) || is.null(chiptype))
     stop("nrow.chip, ncol.chip or chiptype not defined.")
-  
+
   do.call("library", list(probes.pack))
   probe.tab <- get(probes.pack, envir=as.environment(paste("package:", probes.pack, sep="")))
 
@@ -64,10 +64,10 @@ buildCdfEnv.matchprobes <- function(matches, ids, probes.pack,
   for (i in seq(along=matches$match)) {
     if (verbose)
       update(pbt)
-    
+
     xy <- getxy.probeseq(probeseq=probe.tab, i.row=matches$match[[i]],
                          x.colname = x.colname, y.colname = y.colname)
-    if (nrow(xy) == 0 && simplify) {      
+    if (nrow(xy) == 0 && simplify) {
       next
     }
     assign(ids[i],
@@ -76,9 +76,9 @@ buildCdfEnv.matchprobes <- function(matches, ids, probes.pack,
   }
   if (verbose)
     close(pbt)
-  
-  cdfenv <- wrapCdfEnvAffy(cdfenv, nrow.chip, ncol.chip, chiptype)  
-  return(cdfenv)  
+
+  cdfenv <- wrapCdfEnvAffy(cdfenv, nrow.chip, ncol.chip, chiptype)
+  return(cdfenv)
 }
 
 getxy.probeseq <- function(ppset.id=NULL, probeseq=NULL, i.row=NULL, offset.one=TRUE,
@@ -92,7 +92,7 @@ getxy.probeseq <- function(ppset.id=NULL, probeseq=NULL, i.row=NULL, offset.one=
   mm.offset <- rep(0, length=length(i.row))
   mm.offset[i.row < 0] <- 1
   i.row <- abs(i.row)
-  
+
   xy <- cbind(probeseq[[x.colname]][i.row], probeseq[[y.colname]][i.row] + mm.offset) + 1
   colnames(xy) <- c("x", "y")
   return(xy)
