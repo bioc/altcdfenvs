@@ -31,13 +31,8 @@ buildCdfEnv.matchprobes(matches, ids, probes.pack, abatch=NULL,
   \item{x.colname, y.colname}{see the \code{getxy.probeseq}}
   \item{verbose}{verbosity (\code{TRUE} or \code{FALSE})}
 }
-\details{
-  The class \code{CdfEnv} is defined as S3 to ensure compatibility with
-  what is existing while changes are made.
-  Migration to S4 is likely to happen after that\ldots
-}
 \value{
-  An instance of class \code{CdfEnv}.
+  An instance of class \code{CdfEnvAffy}.
 }
 \examples{
 ## To appear

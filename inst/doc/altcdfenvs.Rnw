@@ -53,7 +53,10 @@ oligonucleotide arrays, and can be adapted or extended to other platforms.
 The bibliographic reference associated with the package is:\\
 Alternative mapping of probes to genes for {\it Affymetrix} chips
 Laurent Gautier, Morten Mooller, Lennart Friis-Hansen, Steen Knudsen
-BMC Bioinformatics 2004, 5:111 (14 August 2004).
+BMC Bioinformatics 2004, 5:111 (14 August 2004)\footnote{An other
+research team mapped probes to NCBI's RefSeq at about the same time
+that we were doing it independantly. For details, see: Mecham {\it et al.},
+ 2004, Nucl. Acids Research, vol. 32, no. 9, pp. e74-e74. }.
 
 
 Let's start by loading the package:
