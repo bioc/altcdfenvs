@@ -1,0 +1,8 @@
+Package: altcdfenvs
+Version: 0.0-1
+Title: alternative cdfenvs
+Author: Laurent Gautier <laurent@cbs.dtu.dk>
+Maintainer: Laurent Gautier <laurent@cbs.dtu.dk>
+Depends: R (>= 1.7.1), Biobase, affy, matchprobes, splicegear
+Description: Utilities to handle cdfenvs
+License: GPL version 2 or newer
