@@ -52,16 +52,36 @@ The numbers $712$ and $712$ correspond to the dimension of the array.
 If you do not know these numbers for your chip, the easiest (for the
 moment) is to read CEL data in an \Rclass{AffyBatch} and call the function
 \Rfunction{print} on this object.
+Hopefully, the cdf packages offered on the bioconductor website will be modified,
+which will make this step (and the complication to know the dimension
+of the chip) unncessary.
 
 \section*{How to subset an environment using probe set ids}
 
 (see the vignette `n-genomes chips')
 
-\section*{How to exclude probe pairs according to a given index / XY coordinates}
+\section*{How to work with given index / XY coordinates}
 
-The function \Rfunction{removeIndex} is designed to do so.
+\subsection*{Getting index}
 
+The method \Rfunction{indexProbes} is implemeted for objects of class \Rclass{AltCdfEnvs}
+<<>>=
+#indexProbes(planocdf, "pm", "")
+@ 
 
+One can directly work on the CDF data, without having to load CEL data.
+
+\subsection*{Removing probe sets}
+
+The function \Rfunction{removeIndex} let one remove probe sets given
+their index.
+
+\subsection*{Multiple use of index}
+
+When crafting an AltCdfEnv, it can happen that probe indexes are used
+by several probe sets.
+
+The \Rfunction{unique.CdfEnvAffy} is designed to help one to deal with the issue.
 
 
 \section*{How to use this environment}
