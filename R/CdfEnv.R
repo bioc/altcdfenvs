@@ -21,8 +21,8 @@ setClass("CdfEnvAffy",
          prototype = list(index2xy = index2xy.CdfEnvAffy,
            xy2index = xy2index.CdfEnvAffy))
 
-## ---
 
+## ---
 setAs("CdfEnvAffy", "environment", function(from) from@envir )
 
 setAs("CdfEnvAffy", "Cdf",
@@ -169,10 +169,14 @@ setMethod("show", signature("CdfEnvAffy"),
 
 validCdfEnvAffy <- function(cdfenv, verbose=TRUE) {
 
+  if (verbose)
+    cat("Validating CdfEnvAffy:\n")
   envir <- as(cdfenv, "environment")
   keys <- ls(envir)
 
   ## probe types
+  if (verbose)
+    cat("  Checking probe types.\n")
   n <- length(cdfenv@probeTypes)
   tmp <- rep(FALSE, n)
   for (i in seq(along=keys)) {
@@ -184,8 +188,11 @@ validCdfEnvAffy <- function(cdfenv, verbose=TRUE) {
   else
     valid <- TRUE
   r.probeTypes <- list(valid=valid, invalid.ones=keys[which(tmp)])
-
+  if (verbose)
+    cat(sum(tmp), "invalid ones.\n")
   ## XY
+  if (verbose)
+    cat("  Checking XY coordinates.\n")
   tmp <- rep(FALSE, n)
   for (i in seq(along=keys)) {
     ip <- indexProbes(cdfenv, which = cdfenv@probeTypes, probeSetNames = keys[i])[[1]]
@@ -198,7 +205,9 @@ validCdfEnvAffy <- function(cdfenv, verbose=TRUE) {
   else
     valid <- TRUE
   r.xy <- list(valid=valid, invalid.ones=keys[which(tmp)])
-
+  if (verbose)
+    cat(sum(tmp), "invalid ones\n")
+  
   r.details <- list(probeTypes=r.probeTypes, xy=r.xy)
 
   r <- all( unlist(lapply(r.details, function(x) x$valid)) )

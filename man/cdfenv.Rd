@@ -8,7 +8,8 @@
   A set of functions to handle cdfenvs
 }
 \usage{
-wrapCdfEnvAffy(cdfenv, nrow.chip, ncol.chip, chiptype)
+wrapCdfEnvAffy(cdfenv, nrow.chip, ncol.chip, chiptype, check = TRUE,
+               verbose = FALSE)
 getCdfEnvAffy(abatch)
 buildCdfEnv.matchprobes(matches, ids, probes.pack, abatch=NULL,
                         nrow.chip=NULL, ncol.chip=NULL, chiptype=NULL,
@@ -18,6 +19,7 @@ buildCdfEnv.matchprobes(matches, ids, probes.pack, abatch=NULL,
 \arguments{
   \item{abatch}{an \code{AffyBatch}}
   \item{cdfenv}{A cdfenv environment}
+  \item{check}{perform consistency check or not}
   \item{chiptype}{A name for the chip type}
   \item{ids}{a vector of probe set identifiers for the matches}
   \item{matches}{a list as returned by the function
@@ -35,6 +37,6 @@ buildCdfEnv.matchprobes(matches, ids, probes.pack, abatch=NULL,
   An instance of class \code{CdfEnvAffy}.
 }
 \examples{
-## To appear
+## See the main vignette
 }
 \keyword{manip}
