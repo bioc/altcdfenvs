@@ -30,11 +30,13 @@ setAs("CdfEnvAffy", "Cdf",
         m <- matrix(as.numeric(NA), from@nrow, from@ncol)
         l <- ls(from@envir)
         for (i in seq(along=l)) {
-          tmp <- indexProbes(from, "pm", l[i])
+          tmp <- indexProbes(from, "pm", l[i])[[1]]
           m[tmp] <- i
-          tmp <- indexProbes(from, "mm", l[i])
+          tmp <- indexProbes(from, "mm", l[i])[[1]]
           m[tmp] <- i          
         }
+        cdf <- new("Cdf", cdfName="HG-U133A", name=m, name.levels=l)
+        return(cdf)
       }     
       )
 
