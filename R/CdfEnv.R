@@ -35,7 +35,7 @@ setAs("CdfEnvAffy", "Cdf",
           tmp <- indexProbes(from, "mm", l[i])[[1]]
           m[tmp] <- i
         }
-        cdf <- new("Cdf", cdfName="HG-U133A", name=m, name.levels=l)
+        cdf <- new("Cdf", cdfName=from@chipType, name=m, name.levels=l)
         return(cdf)
       }
       )
@@ -47,22 +47,45 @@ geneNames.CdfEnvAffy <- function(object) {
 setMethod("geneNames", "CdfEnvAffy", geneNames.CdfEnvAffy)
 
 ## ---
-setMethod("[", "CdfEnvAffy", function(x, i, j,..., drop=FALSE) {
+setMethod("[", "CdfEnvAffy", function(x, i, j, ..., drop=FALSE) {
   if( !missing(j)) {
     stop("Improper subsetting. Only one vector of IDs should be given.\n")
   }
 
-  if (! is.character(i)) {
-    stop("'i' should be of mode 'character'")
-  }
+  if (is.matrix(i)) {
+    if (! is.integer(i)) {
+      stop("not implemented")
+      ##stop("when a matrix, 'i' should be of mode 'integer'")
+    }
+    y <- x
+    y@envName <- paste(x@envName, "-subsetXYcoords", sep="")
+    y@envir <- new.env(hash=TRUE)
+    
+    ## make a Cdf (faster lookup for XY or indexes).
+    cdf <- as(cdfenv, "Cdf")
+    idx <- xy2index(x, i)
+    for (i in idx) {
+      id <- cdf@names.level[cdf@names[i]]
+      tmp <- indexProbes(y, y@probeTypes, id)
+      ## implementation not complete
+      ## pm or mm to be sorted
+      ## and idx appended to tmp
+      assign(id, tmp, envir=y@envir)
+    }
+    
+  } else {
+    if (! is.character(i)) {
+      stop("when not a matrix, 'i' should be of mode 'character'")
+    }
+    y <- x
+    y@envName <- paste(x@envName, "-subsetProbeSets", sep="")
+    y@envir <- new.env(hash=TRUE)
+    
 
-  y <- x
-  y@envName <- paste(x@envName, "-subset", sep="")
-  y@envir <- new.env(hash=TRUE)
-
-  for (id in i) {
-    tmp <- indexProbes(x, x@probeTypes, id)
-    assign(id, tmp, envir=y@envir)
+    for (id in i) {
+      tmp <- indexProbes(x, x@probeTypes, id)
+      assign(id, tmp, envir=y@envir)
+    }
   }
   return(y)
 })
@@ -101,7 +124,7 @@ indexProbes.CdfEnvAffy <- function(object, which, probeSetNames=NULL) {
     if ( is.na(ans[[i]][1]) )
       next
 
-    ##as.vector cause it might be a matrix if both
+    ##as.vector cause it might be a matrix if all probe types
     tmp <- as.vector(ans[[i]][, i.probes])
 
     ans[[i]] <- tmp
