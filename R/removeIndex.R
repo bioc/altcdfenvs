@@ -2,7 +2,8 @@ removeIndex <- function(x, i, simplify = TRUE, verbose=FALSE) {
   if (! is.integer(i)) {
     stop("'i' must be of mode integer.")
   }
-  remove.me <- rep(TRUE, length=max(i))
+  remove.me <- rep(FALSE, length=max(i))
+  remove.me[i] <- TRUE
   tmp.env<- as(x, "environment")
   ids <- ls(tmp.env)
   ## copy env
@@ -11,7 +12,7 @@ removeIndex <- function(x, i, simplify = TRUE, verbose=FALSE) {
     cat("removing duplicated elements...")
   for (i in ids) {
     tmp.i <- get(i, envir=tmp.env)
-    tmp.ok <- (c(tmp.i) > length(remove.me)) | (remove.me[c(tmp.i)])
+    tmp.ok <- (c(tmp.i) > length(remove.me)) | (! remove.me[c(tmp.i)])
     tmp.i[!tmp.ok] <- NA
     tmp.new <- tmp.i[!apply(tmp.i, 1, function(x) all(is.na(x))), , drop=FALSE]
     if (length(tmp.new) == 0 && simplify) {
