@@ -147,12 +147,12 @@ plot(p[[1]])
 
 The package contains a function to create a \Rclass{CdfEnv} from the matches:
 <<>>=
-get.unigeneIDs <- function(x) {
-reg <- regexpr("Hs#[^[:blank:]]+", x)
+get.RNA.IDs <- function(x) {
+reg <- regexpr("(Hs#|NM)[^[:blank:]|]+", x)
 r <- substr(my.entries$headers, reg, reg+attr(reg, "match.length")-1)
 return(r)
 }
-ids <- get.unigeneIDs(my.entries$headers)
+ids <- get.RNA.IDs(my.entries$headers)
 alt.cdf <- buildCdfEnv.matchprobes(m, ids, 
                                    nrow.chip = 712, ncol.chip = 712, 
                                    chiptype = "HG-U133A",

@@ -31,7 +31,7 @@ buildCdfEnv.matchprobes <- function(matches, ids, probes.pack, abatch=NULL, nrow
   if (! (is.list(matches) && length(matches) > 0) && length(matches[[1]]) < 3)
     stop("arg 'matches' should be a list a returned by matchprobes.")
 
-  if (length(matches) != length(ids))
+  if (length(matches[[1]]) != length(ids))
     stop("'matches' and 'ids' must have the same length.")
 
   if ( ! is.null(abatch)) {

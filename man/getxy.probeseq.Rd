@@ -33,6 +33,11 @@ while the second column contains y coordinates.
 \author{ Laurent }
 
 \section{Warning }{
+  The parameter \code{offset.one} is currently needed, as for historical
+  reasons the XY coordinates used in the affy package start at 1
+  (while the XY coordinates in Affymetrix files start at zero). Play
+  with this parameter at your own risks.
+  
   This function should not be confused with the methods \code{index2xy}
   and similar. Here the the XY coordinate come from a \code{data.frame}
   that stores information about an arbitrary number probes on the
