@@ -88,7 +88,7 @@ One can foresee that the matching of a set of reference sequences against
 all the probes can be parallelized easily: the reference sequences can
 simply be distributed across different processors/machines. When
 working with all the reference sequences in a single large FASTA file,
-the option \Rcode{skip} can let one implement a poor man's parallel sequence matching
+the option \Robject{skip} can let one implement a poor man's parallel sequence matching
 very easily.
 
 \section*{Creating an alternative mapping from sequences in a FASTA file}
