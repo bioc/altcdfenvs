@@ -2,11 +2,10 @@
 
 
 index2xy.CdfEnvAffy <- function(object, i) {
-  indices2xy(i, nr = object@nrow)-getOption("BioC")$affy$xy.offset
+  indices2xy(i, nr = object@nrow)-1
 }
 xy2index.CdfEnvAffy <- function(object, x, y) {
-  o <- getOption("BioC")$affy$xy.offset
-  xy2indices(x+o, y+o, nr = object@nrow)
+  xy2indices(x+1, y+1, nr = object@nrow)
 }
 
 setClass("CdfEnvAffy",
@@ -25,53 +24,14 @@ setClass("CdfEnvAffy",
 
 setAs("CdfEnvAffy", "environment", function(from) from@envir )
 
-setAs("CdfEnvAffy", "Cdf",
-      function(from) {
-        m <- matrix(as.numeric(NA), from@nrow, from@ncol)
-        l <- ls(from@envir)
-        for (i in seq(along=l)) {
-          tmp <- indexProbes(from, "pm", l[i])[[1]]
-          m[tmp] <- i
-          tmp <- indexProbes(from, "mm", l[i])[[1]]
-          m[tmp] <- i
-        }
-        cdf <- new("Cdf", cdfName="HG-U133A", name=m, name.levels=l)
-        return(cdf)
-      }
-      )
-
-
 geneNames.CdfEnvAffy <- function(object) {
-  ls(as(object, "environment"))
+  ls(as(object, "environment"))  
 }
 setMethod("geneNames", "CdfEnvAffy", geneNames.CdfEnvAffy)
 
 ## ---
-setMethod("[", "CdfEnvAffy", function(x, i, j,..., drop=FALSE) {
-  if( !missing(j)) {
-    stop("Improper subsetting. Only one vector of IDs should be given.\n")
-  }
-
-  if (! is.character(i)) {
-    stop("'i' should be of mode 'character'")
-  }
-
-  y <- x
-  y@envName <- paste(x@envName, "-subset", sep="")
-  y@envir <- new.env(hash=TRUE)
-
-  for (id in i) {
-    tmp <- indexProbes(x, x@probeTypes, id)
-    assign(id, tmp, envir=y@envir)
-  }
-  return(y)
-})
-
-
-
-## ---
 indexProbes.CdfEnvAffy <- function(object, which, probeSetNames=NULL) {
-
+  
   probeTypes <- object@probeTypes
 
   ##FIXME: hack for compatibility with 'affy'
@@ -80,33 +40,33 @@ indexProbes.CdfEnvAffy <- function(object, which, probeSetNames=NULL) {
     warning("The use of \"both\" in 'which' is deprecated.")
   }
   ##
-
+  
   if ( ! all(which %in% probeTypes))
     stop(paste("'which' can only take values from:", paste(probeTypes, collapse=", ")))
-
+  
   i.probes <- match(which, probeTypes)
-
+  
   envir <- as(object, "environment")
 
   if(is.null(probeSetNames))
     probeSetNames <- ls(envir)
-
+  
   ans <-  mget(probeSetNames, envir=envir, ifnotfound=list(NA))
-
+  
   ## this kind of thing could be included in 'multiget' as
   ## an extra feature. A function could be specified to
   ## process what is 'multi'-get on the fly
   for (i in seq(along=ans)) {
-
+    
     if ( is.na(ans[[i]][1]) )
       next
 
     ##as.vector cause it might be a matrix if both
     tmp <- as.vector(ans[[i]][, i.probes])
-
+        
     ans[[i]] <- tmp
   }
-
+  
   return(ans)
 }
 
@@ -148,7 +108,7 @@ validCdfEnvAffy <- function(cdfenv, verbose=TRUE) {
 
   envir <- as(cdfenv, "environment")
   keys <- ls(envir)
-
+  
   ## probe types
   n <- length(cdfenv@probeTypes)
   tmp <- rep(FALSE, n)
@@ -161,7 +121,7 @@ validCdfEnvAffy <- function(cdfenv, verbose=TRUE) {
   else
     valid <- TRUE
   r.probeTypes <- list(valid=valid, invalid.ones=keys[which(tmp)])
-
+  
   ## XY
   tmp <- rep(FALSE, n)
   for (i in seq(along=keys)) {
@@ -175,7 +135,7 @@ validCdfEnvAffy <- function(cdfenv, verbose=TRUE) {
   else
     valid <- TRUE
   r.xy <- list(valid=valid, invalid.ones=keys[which(tmp)])
-
+  
   r.details <- list(probeTypes=r.probeTypes, xy=r.xy)
 
   r <- all( unlist(lapply(r.details, function(x) x$valid)) )
@@ -201,7 +161,7 @@ printValidCdfEnvAffy <- function(x) {
     else
       cat(paste(paste(y$invalid.ones[1:5], collapse=" "), "...\n"))
   }
-
+  
   r.details <- attr(x, "details")
 
   cat("Probe types:\n")
@@ -215,8 +175,9 @@ printValidCdfEnvAffy <- function(x) {
 ## ---
 
 validAffyBatch <- function(abatch, cdfenv) {
-  stopifnot(is(abatch, "AffyBatch"),
-            is(cdfenv, "CdfEnvAffy"))
+  
+  stopifnot(inherits(abatch, "AffyBatch"),
+            inherits(cdfenv, "CdfEnvAffy"))
 
   if ( (abatch@nrow != cdfenv@nrow) || (abatch@ncol != cdfenv@ncol))
     valid <- FALSE
@@ -234,5 +195,5 @@ validAffyBatch <- function(abatch, cdfenv) {
 
 # setMethod("initialize", "CdfEnvAffy",
 #           function(.Object) {
-
+            
 #           })
