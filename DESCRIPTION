@@ -1,9 +1,10 @@
 Package: altcdfenvs
-Version: 1.0.0
+Version: 1.0.1
 Title: alternative cdfenvs
 Author: Laurent Gautier <laurent@cbs.dtu.dk>
 Maintainer: Laurent Gautier <laurent@cbs.dtu.dk>
 Depends: R (>= 1.9.0), Biobase, affy, matchprobes, splicegear, hgu133aprobe
+Suggests: hgu95acdf
 Description: Utilities to handle cdfenvs
 License: GPL version 2 or newer
 Collate: cdfenvs.R readFASTA.R CdfEnv.R zzz.R
