@@ -27,6 +27,25 @@ removeIndex(x, i, simplify = TRUE, verbose = FALSE)
 \author{ Laurent Gautier }
 \seealso{ \code{\link{CdfEnvAffy-class}} }
 \examples{
-## to be done
+
+## use plasmodiumanopheles chip as an example
+library(plasmodiumanophelescdf)
+
+## wrap in a (convenient) CdfEnvAffy object
+planocdf <- wrapCdfEnvAffy(plasmodiumanophelescdf, 712, 712, "plasmodiumanophelescdf")
+print(planocdf)
+
+## ask for the probe indexed '10759' to be removed
+## (note: if one wishes to remove from X/Y coordinates,
+## the function xy2index can be of help).
+planocdfCustom <- removeIndex(planocdf, as.integer(10759))
+
+## let see what happened (we made this example knowing in which
+## probe set the probe indexed '10759' is found).
+indexProbes(planocdf, "pm", "200000_s_at")
+indexProbes(planocdfCustom, "pm", "200000_s_at")
+## The 'second' pm probe (indexed '10579') in the probe set is now set
+## to NA.
+
 }
 \keyword{ manip }

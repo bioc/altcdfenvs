@@ -1,3 +1,5 @@
+##setGeneric("unique", )
+
 unique.CdfEnvAffy <- function(x, incomparable=FALSE, simplify=TRUE, verbose=FALSE, ...) {
   counts <- countduplicated(x, incomparable=incomparable, verbose=verbose)
   tmp.env<- as(x, "environment")

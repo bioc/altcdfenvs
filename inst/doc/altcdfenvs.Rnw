@@ -37,8 +37,9 @@ can be grouped in a probe set. Between the time the probes for a given short
 oligonucleotide chip were designed, and the time an analysis is made,
 the knowledge of expected transcripts for a given organism might have changed.
 Unless one includes the latest development in transcripts into
-an analysis, the analysis could suffer from what could be nicknamed a
-{\it Dorian Gray} effect. The chip itself does not change, which means
+an analysis, the analysis could suffer from what we like to call a
+{\it Dorian Gray}\footnote{From the novel `The Picture of
+  Dorian Gray' by Oscar Wilde.} effect. The chip itself does not change, which means
 that the probes and their respective sequences remain the same, while
 the knowledge of the transcripts, and eventually their sequence, might
 evolve, and in time the immobility of the probe and probe sets give an
@@ -46,13 +47,13 @@ uglier picture of the biological phenomena to study. Being able to
 easily modify or replace the grouping of probes in probe sets gives
 the opportunity to minimize this effect.
 
-The package is directly usable with {\it Affymetrix GeneChip} short
-oligonucleotide arrays, and can be adapted or extended for other platforms.
+The package is directly usable with {\it Affymetrix} {\it GeneChip} short
+oligonucleotide arrays, and can be adapted or extended to other platforms.
 
-You can cite this work with:
-Laurent Gautier, Morten M{\o}ller, Lennart Friis-Hansen and
-Steen Knudsen. Alternative mapping of probes to genes for
-{\it Affymetrix} chips. 2004. BMC Bioinformatics (to appear).
+The bibliographic reference associated with the package is:\\
+Alternative mapping of probes to genes for {\it Affymetrix} chips
+Laurent Gautier, Morten Mooller, Lennart Friis-Hansen, Steen Knudsen
+BMC Bioinformatics 2004, 5:111 (14 August 2004).
 
 
 Let's start by loading the package:

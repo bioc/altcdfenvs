@@ -51,9 +51,9 @@ Typically, there is an instance of the class for each type of chip
   \describe{
     \item{[}{\code{signature(object = "CdfEnvAffy")}: subset a cdf, that
       is return a new cdf containing only a subset of the probe sets.}
-    \item{coerce}{\code{signature(object = "CdfEnvAffy", "environment")}: corce an
+    \item{coerce}{\code{signature(object = "CdfEnvAffy", "environment")}: coerce an
       instance of the class to an \code{enviroment}.}
-    \item{coerce}{\code{signature(object = "CdfEnvAffy", "Cdf")}: corce an
+    \item{coerce}{\code{signature(object = "CdfEnvAffy", "Cdf")}: coerce an
       instance of the class to a \code{Cdf}.}
     \item{geneNames}{\code{signature(object="CdfEnvAffy")}: Return the
     names of the known probe sets (of course, it depends on the associated CDF).}
