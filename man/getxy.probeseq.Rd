@@ -8,14 +8,15 @@
 }
 \usage{
 getxy.probeseq(ppset.id = NULL, probeseq = NULL, i.row = NULL,
-offset.one = TRUE, x.colname = "x", y.colname = "y")
+xy.offset = NULL, x.colname = "x", y.colname = "y")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{ppset.id}{ The probe sets of interest (a vector of mode \code{character}. }
   \item{probeseq}{ The probe sequence \code{data.frame} (see details). }
   \item{i.row}{ Row indexes in the \code{data.frame} (see details). }
-  \item{offset.one}{ Add one to the XY coordinates returned. }
+  \item{xy.offset}{ Offset for the xy coordinates. if \code{NULL}, uses
+    the default offset stored as an option for the affy package. }
   \item{x.colname, y.colname}{ The probe sequence packages have seen the
     names for the columns in their \code{data.frame}. This parameters
     exists to let us follow these changes.}
@@ -33,10 +34,9 @@ while the second column contains y coordinates.
 \author{ Laurent }
 
 \section{Warning }{
-  The parameter \code{offset.one} is currently needed, as for historical
-  reasons the XY coordinates used in the affy package start at 1
-  (while the XY coordinates in Affymetrix files start at zero). Play
-  with this parameter at your own risks.
+  The parameter \code{xy.offset.one} is here for historical
+  reasons. This should not be touched, the option in the affy
+  package should be modified if one wishes to modify this.
   
   This function should not be confused with the methods \code{index2xy}
   and similar. Here the the XY coordinate come from a \code{data.frame}

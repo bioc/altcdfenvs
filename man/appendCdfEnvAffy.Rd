@@ -5,7 +5,7 @@
   append probe sets to a CdfEnvAffy
 }
 \usage{
-appendCdfEnvAffy(acdfenv, id, i, nocopy=FALSE)
+appendCdfEnvAffy(acdfenv, id, i, nocopy = TRUE)
 }
 \arguments{
   \item{acdfenv}{ instance of class \code{CdfEnvAffy}}

@@ -105,5 +105,9 @@ plot(cdfenv.hgu95a)
 ## plot the coordinates
 plotLocation(xy)
 
+## subset the environment
+
+cdfenv.hgu95a.mini <- cdfenv.hgu95a["1000_at"]
+
 }
 \keyword{classes}

@@ -25,8 +25,13 @@ getCdfEnvAffy <- function(abatch) {
 }
 
 
-getxy.probeseq <- function(ppset.id=NULL, probeseq=NULL, i.row=NULL, offset.one=TRUE,
+getxy.probeseq <- function(ppset.id=NULL, probeseq=NULL, i.row=NULL, xy.offset=NULL,
                            x.colname = "x", y.colname = "y") {
+
+  if ( is.null(xy.offset) ) {
+    xy.offset <- getOption("BioC")$affy$xy.offset
+  }
+  
   if (sum(c(is.null(ppset.id), is.null(i.row))) != 1)
     stop("specify one and only one of 'ppset.id', 'i.row'")
 
@@ -41,7 +46,8 @@ getxy.probeseq <- function(ppset.id=NULL, probeseq=NULL, i.row=NULL, offset.one=
   mm.offset[i.row < 0] <- 1
   i.row <- abs(i.row)
 
-  xy <- cbind(probeseq[[x.colname]][i.row], probeseq[[y.colname]][i.row] + mm.offset) + 1
+  xy <- cbind(probeseq[[x.colname]][i.row], probeseq[[y.colname]][i.row] + mm.offset) + xy.offset
+  
   colnames(xy) <- c("x", "y")
   return(xy)
 }
