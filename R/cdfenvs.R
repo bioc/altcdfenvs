@@ -1,21 +1,32 @@
-wrapCdfEnv <- function(cdfenv, nrow.chip, ncol.chip, chiptype) {
-  class(cdfenv) <- c("environment", "CdfEnv")
-  attr(cdfenv, "nrow") <- nrow.chip
-  attr(cdfenv, "ncol") <- ncol.chip
-  attr(cdfenv, "chipType") <- chiptype
-  return(cdfenv)
+wrapCdfEnvAffy <- function(cdfenv, nrow.chip, ncol.chip, chiptype) {
+  object <- new("CdfEnvAffy", envir = cdfenv,
+                nrow = as.integer(nrow.chip), ncol = as.integer(ncol.chip),
+                probeTypes = c("pm", "mm"),
+                chipType = chiptype)
+  valid <- validCdfEnvAffy(object, verbose=FALSE)
+  if ( ! valid ) {
+    printValidCdfEnvAffy(valid)
+    stop("invalid CdfEnvAffy")
+  }
+  return(object)
+#   class(cdfenv) <- c("environment", "CdfEnv")
+#   attr(cdfenv, "nrow") <- nrow.chip
+#   attr(cdfenv, "ncol") <- ncol.chip
+#   attr(cdfenv, "chipType") <- chiptype
+#   return(cdfenv)
 }
 
-getCdfEnv <- function(abatch) {
+getCdfEnvAffy <- function(abatch) {
   if (class(abatch) != "AffyBatch")
     stop("arg must be of class 'AffyBatch'.")
 
   cdfenv <- getCdfInfo(abatch)
-  cdfenv <- wrapCdfEnv(cdfenv, abatch@nrow, abatch@ncol, abatch@cdfName)
+  
+  cdfenv <- wrapCdfEnvAffy(cdfenv, abatch@nrow, abatch@ncol, abatch@cdfName)
   return(cdfenv)
 }
 
-buildCdfEnv <- function(matches, ids, probes.pack, abatch=NULL, nrow.chip=NULL, ncol.chip=NULL, chiptype=NULL, mm=NA) {
+buildCdfEnv.matchprobes <- function(matches, ids, probes.pack, abatch=NULL, nrow.chip=NULL, ncol.chip=NULL, chiptype=NULL, mm=NA) {
 
   if (! (is.list(matches) && length(matches > 0) && length(matches < 3)))
     stop("arg 'matches' should be a list a returned by matchprobes.")

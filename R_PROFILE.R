@@ -1,0 +1,2 @@
+require(affy, quietly = TRUE)
+
