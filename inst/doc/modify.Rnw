@@ -1,0 +1,71 @@
+% -*- mode: noweb; noweb-default-code-mode: R-mode; -*-
+%\VignetteIndexEntry{affy primer}
+%\VignetteKeywords{Preprocessing, Affymetrix}
+%\VignetteDepends{altcdfenvs}
+%\VignettePackage{altcdfenvs}
+%documentclass[12pt, a4paper]{article}
+\documentclass[12pt]{article}
+
+\usepackage{amsmath,pstricks}
+\usepackage{hyperref}
+\usepackage[authoryear,round]{natbib}
+
+\textwidth=6.2in
+\textheight=8.5in
+%\parskip=.3cm
+\oddsidemargin=.1in
+\evensidemargin=.1in
+\headheight=-.3in
+
+\newcommand{\scscst}{\scriptscriptstyle}
+\newcommand{\scst}{\scriptstyle}
+\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Robject}[1]{{\texttt{#1}}}
+\newcommand{\Rclass}[1]{{\texttt{#1}}}
+\newcommand{\Rpackage}[1]{{\textit{#1}}}
+
+\author{Laurent Gautier}
+\title{Modifying existing CDF environments to make alternative CDF environments}
+
+\begin{document}
+\maketitle
+
+\section*{Introduction}
+First we need to load the package:
+<<>>=
+library(altcdfenvs)
+@ 
+The {\it Plasmodium} / {\it Anopheles} is taken as an example:
+<<>>=
+library(plasmodiumanophelescdf)
+@
+One will adapt easily the code below for other chips.
+
+\section*{How to build a CdfEnvAffy object from the cdfenv package}
+The first step is to wrap the naked enviroment in the package
+\Rpackage{plasmodiumanophelescdf} in an object:
+<<>>=
+planocdf <- wrapCdfEnvAffy(plasmodiumanophelescdf, 712, 712, "plasmodiumanophelescdf")
+print(planocdf)
+@ 
+The numbers $712$ and $712$ correspond to the dimension of the array.
+If you do not know these numbers for your chip, the easiest (for the
+moment) is to read CEL data in an \Rclass{AffyBatch} and call the function
+\Rfunction{print} on this object.
+
+\section*{How to subset an environment using probe set ids}
+
+(see the vignette `n-genomes chips')
+
+\section*{How to exclude probe pairs according to a given index / XY coordinates}
+
+The function \Rfunction{removeIndex} is designed to do so.
+
+
+
+
+\section*{How to use this environment}
+
+(see the vignette `n-genomes chips')
+
+\end{document}
