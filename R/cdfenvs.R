@@ -86,9 +86,13 @@ getxy.probeseq <- function(ppset.id=NULL, probeseq=NULL, i.row=NULL, offset.one=
   if (sum(c(is.null(ppset.id), is.null(i.row))) != 1)
     stop("specify one and only one of 'ppset.id', 'i.row'")
 
+  if (is.null(probeseq))
+    stop("the argument 'probeseq' must be specified !")
+  
   if (is.null(i.row))
     i.row <- probeseq$Probe.Set.Name %in% ppset.id
 
+    
   mm.offset <- rep(0, length=length(i.row))
   mm.offset[i.row < 0] <- 1
   i.row <- abs(i.row)

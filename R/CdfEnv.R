@@ -215,7 +215,6 @@ printValidCdfEnvAffy <- function(x) {
 ## ---
 
 validAffyBatch <- function(abatch, cdfenv) {
-
   stopifnot(is(abatch, "AffyBatch"),
             is(cdfenv, "CdfEnvAffy"))
 
