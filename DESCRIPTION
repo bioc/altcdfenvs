@@ -7,5 +7,4 @@ Depends: R (>= 1.7.1), Biobase, affy, matchprobes, splicegear, hgu133aprobe
 Description: Utilities to handle cdfenvs
 License: GPL version 2 or newer
 Collate:CdfEnv.R cdfenvs.R readFASTA.R zzz.R
-ReleaseLevel: devel
 
