@@ -2,10 +2,11 @@
 
 
 index2xy.CdfEnvAffy <- function(object, i) {
-  indices2xy(i, nr = object@nrow)-1
+  indices2xy(i, nr = object@nrow)-getOption("BioC")$affy$xy.offset
 }
 xy2index.CdfEnvAffy <- function(object, x, y) {
-  xy2indices(x+1, y+1, nr = object@nrow)
+  o <- getOption("BioC")$affy$xy.offset
+  xy2indices(x+o, y+o, nr = object@nrow)
 }
 
 setClass("CdfEnvAffy",
@@ -24,10 +25,47 @@ setClass("CdfEnvAffy",
 
 setAs("CdfEnvAffy", "environment", function(from) from@envir )
 
+setAs("CdfEnvAffy", "Cdf",
+      function(from) {
+        m <- matrix(as.numeric(NA), from@nrow, from@ncol)
+        l <- ls(from@envir)
+        for (i in seq(along=l)) {
+          tmp <- indexProbes(from, "pm", l[i])
+          m[tmp] <- i
+          tmp <- indexProbes(from, "mm", l[i])
+          m[tmp] <- i          
+        }
+      }     
+      )
+
+
 geneNames.CdfEnvAffy <- function(object) {
   ls(as(object, "environment"))  
 }
 setMethod("geneNames", "CdfEnvAffy", geneNames.CdfEnvAffy)
+
+## ---
+setMethod("[", "CdfEnvAffy", function(x, i, j,..., drop=FALSE) {
+  if( !missing(j)) {
+    stop("Improper subsetting. Only one vector of IDs should be given.\n")
+  }
+
+  if (! is.character(i)) {
+    stop("'i' should be of mode 'character'")
+  }
+
+  y <- x
+  y@envName <- paste(x@envName, "-subset", sep="")
+  y@envir <- new.env(hash=TRUE)
+
+  for (id in i) {
+    tmp <- indexProbes(x, x@probeTypes, id)
+    assign(id, tmp, envir=y@envir)
+  }  
+  return(y)
+})
+
+
 
 ## ---
 indexProbes.CdfEnvAffy <- function(object, which, probeSetNames=NULL) {
