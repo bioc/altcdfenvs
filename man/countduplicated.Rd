@@ -7,12 +7,12 @@
   are found in this object.
 }
 \usage{
-countduplicated(x, incomparable = FALSE, verbose = FALSE)
+countduplicated(x, incomparables = FALSE, verbose = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{An instance of \code{CdfEnvAffy-class} }
-  \item{incomparable}{ (not implemented yet, keep away) }
+  \item{incomparables}{ (not implemented yet, keep away) }
   \item{verbose}{ verbose or not }
 }
 \details{

@@ -1,7 +1,7 @@
-##setGeneric("unique", )
+##setGeneric("unique", function(x, incomparables, ...) standardGeneric("unique"))
 
-unique.CdfEnvAffy <- function(x, incomparable=FALSE, simplify=TRUE, verbose=FALSE, ...) {
-  counts <- countduplicated(x, incomparable=incomparable, verbose=verbose)
+unique.CdfEnvAffy <- function(x, incomparables=FALSE, simplify=TRUE, verbose=FALSE, ...) {
+  counts <- countduplicated(x, incomparables=incomparables, verbose=verbose)
   tmp.env<- as(x, "environment")
   ids <- ls(tmp.env)
   ## copy env
@@ -30,12 +30,14 @@ unique.CdfEnvAffy <- function(x, incomparable=FALSE, simplify=TRUE, verbose=FALS
   return(r)
 }
 
+##setMethod("unique", signature(x="CdfEnvAffy", incomparables="logical"), .unique.CdfEnvAffy)
 
-countduplicated <- function(x, incomparable=FALSE, verbose=FALSE) {
+
+countduplicated <- function(x, incomparables=FALSE, verbose=FALSE) {
   if (!is(x, "CdfEnvAffy"))
     stop("x must inherit from 'CdfEnvAffy'")
 
-  if (incomparable != FALSE)
+  if (incomparables != FALSE)
     warning("'incomparable' not yet implemented !")
 
   if (verbose)

@@ -5,12 +5,12 @@
   Remove duplicated elements from a CdfEnvAffy
 }
 \usage{
-unique.CdfEnvAffy(x, incomparable = FALSE, simplify = TRUE, verbose = FALSE, ...)
+unique.CdfEnvAffy(x, incomparables = FALSE, simplify = TRUE, verbose = FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{ An instance of \code{CdfEnvAffy-class} }
-  \item{incomparable}{ (not yet implemented) }
+  \item{incomparables}{ (not yet implemented) }
   \item{simplify}{ simplify the result }
   \item{verbose}{ verbose or not }
   \item{\dots}{ (here for compatibility with the generic \code{unique}) }

@@ -8,6 +8,8 @@
 \alias{show,CdfEnvAffy-method}
 \alias{xy2index,CdfEnvAffy-method}
 \alias{coerce,CdfEnvAffy,environment-method}
+\alias{coerce,CdfEnvAffy,Cdf-method}
+\alias{[,CdfEnvAffy-method}
 
 \title{Class "CdfEnvAffy"}
 \description{A class to hold the information necessary to handle the
@@ -50,7 +52,9 @@ Typically, there is an instance of the class for each type of chip
 \section{Methods}{
   \describe{
     \item{[}{\code{signature(object = "CdfEnvAffy")}: subset a cdf, that
-      is return a new cdf containing only a subset of the probe sets.}
+      is return a new cdf containing only a subset of the probe
+      sets. The subset of probe sets to take is identified as a vector
+      of identifiers (mode "character").}
     \item{coerce}{\code{signature(object = "CdfEnvAffy", "environment")}: coerce an
       instance of the class to an \code{enviroment}.}
     \item{coerce}{\code{signature(object = "CdfEnvAffy", "Cdf")}: coerce an
