@@ -158,7 +158,7 @@ alt.cdf <- buildCdfEnv.matchprobes(m, ids,
                                    chiptype = "HG-U133A",
                                    probes.pack = "hgu133aprobe")
 @ 
-Note that the physical specificities for the chip must be
+Note that the size for chip must be
 specified. This is currently a problem with cdfenvs as they are
 created by the package \Rpackage{makecdfenv}. The class
 \Rclass{CdfEnv} suggests a way to solve this (hopefully this will be

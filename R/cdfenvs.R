@@ -1,5 +1,6 @@
 wrapCdfEnvAffy <- function(cdfenv, nrow.chip, ncol.chip, chiptype) {
   object <- new("CdfEnvAffy", envir = cdfenv,
+                envName = chiptype,
                 nrow = as.integer(nrow.chip), ncol = as.integer(ncol.chip),
                 probeTypes = c("pm", "mm"),
                 chipType = chiptype)

@@ -2,24 +2,44 @@
 
 setClass("CdfEnvAffy",
          representation(envir = "environment",
+                        envName = "character",
                         nrow = "integer",
                         ncol = "integer",
                         probeTypes = "character",
                         chipType = "character"))
 
+## ---
+
+setAs("CdfEnvAffy", "environment", function(from) from@envir )
+
+geneNames.CdfEnvAffy <- function(object) {
+  ls(as(object, "environment"))  
+}
+setMethod("geneNames", "CdfEnvAffy", geneNames.CdfEnvAffy)
+
+## ---
 indexProbes.CdfEnvAffy <- function(object, which, probeSetNames=NULL) {
   
   probeTypes <- object@probeTypes
-  which <- match.arg(which, probeTypes)
+
+  ##FIXME: hack for compatibility with 'affy'
+  if (identical(which, "both") || identical(which, c("pm", "mm", "both"))) {
+    which <- probeTypes
+    warning("The use of \"both\" in 'which' is deprecated.")
+  }
+  ##
+  
+  if ( ! all(which %in% probeTypes))
+    stop(paste("'which' can only take values from:", paste(probeTypes, collapse=", ")))
   
   i.probes <- match(which, probeTypes)
   
-  envir <- object@envir
+  envir <- as(object, "environment")
 
   if(is.null(probeSetNames))
-    probeSetNames <- ls(object@envir)
+    probeSetNames <- ls(envir)
   
-  ans <-  multiget(probeSetNames, envir=envir, iffail=NA)
+  ans <-  mget(probeSetNames, envir=envir, ifnotfound=list(NA))
   
   ## this kind of thing could be included in 'multiget' as
   ## an extra feature. A function could be specified to
@@ -41,20 +61,25 @@ indexProbes.CdfEnvAffy <- function(object, which, probeSetNames=NULL) {
 setMethod("indexProbes", signature("CdfEnvAffy", which = "character"),
          indexProbes.CdfEnvAffy)
 
+## ---
+
 index2xy.CdfEnvAffy <- function(object, i) {
   indices2xy(i, nr = object@nrow)-1
 }
-setGeneric("index2xy", def = function(object, ...) standardGeneric("index2xy"), useAsDefault = FALSE)
-setMethod("index2xy", signature("CdfEnvAffy", "integer"),
+setGeneric("index2xy", def = function(object, ...) standardGeneric("index2xy"))
+setMethod("index2xy", signature(object="CdfEnvAffy"),
          index2xy.CdfEnvAffy)
+
+## ---
 
 xy2index.CdfEnvAffy <- function(object, x, y) {
   xy2indices(x+1, y+1, nr = object@nrow)
 }
 setGeneric("xy2index", def = function(object, ...) standardGeneric("xy2index"), useAsDefault = FALSE)
-setMethod("xy2index", signature("CdfEnvAffy", "integer", "integer"),
-         xy2index.CdfEnvAffy)
+setMethod("xy2index", signature(object="CdfEnvAffy"),
+          xy2index.CdfEnvAffy)
 
+## ---
 
 plot.CdfEnvAffy <- function(x, xlab = "", ylab = "", main = x@chipType, ...) {
   plot(0, 0, xlim = range(0, x@nrow), ylim = range(0, x@ncol), type="n", xlab = xlab, ylab = ylab, main = main, ...)
@@ -62,21 +87,29 @@ plot.CdfEnvAffy <- function(x, xlab = "", ylab = "", main = x@chipType, ...) {
 
 setMethod("plot", signature(x="CdfEnvAffy", y="missing"), plot.CdfEnvAffy)
 
+## ---
+
 setMethod("show", signature("CdfEnvAffy"),
           function(object) {
-            cat("chip-type:", object@chipType, "\n")
-            cat(length(ls(object@envir)), "probe set(s) defined.\n")
+            cat("Instance of class CdfEnvAffy:\n")
+            cat(" name     :", object@envName, "\n")
+            cat(" chip-type:", object@chipType, "\n")
+            cat(" size     :", object@nrow, "x", object@ncol, "\n")
+            cat("", length(ls(as(object, "environment"))), "probe set(s) defined.\n")
           })
 
+## ---
+
 validCdfEnvAffy <- function(cdfenv, verbose=TRUE) {
-  
-  keys <- ls(cdfenv@envir)
+
+  envir <- as(cdfenv, "environment")
+  keys <- ls(envir)
   
   ## probe types
   n <- length(cdfenv@probeTypes)
   tmp <- rep(FALSE, n)
   for (i in seq(along=keys)) {
-    if (ncol(get(keys[i], envir=cdfenv@envir)) != n)
+    if (ncol(get(keys[i], envir = envir)) != n)
       tmp[i] <- TRUE
   }
   if (n > 0 && sum(tmp) != 0)
@@ -90,7 +123,7 @@ validCdfEnvAffy <- function(cdfenv, verbose=TRUE) {
   for (i in seq(along=keys)) {
     ip <- indexProbes(cdfenv, which = cdfenv@probeTypes, probeSetNames = keys[i])[[1]]
     xy <- index2xy(cdfenv, ip)
-    if (any(xy[, 1] > cdfenv@nrow | xy[, 2] > cdfenv@ncol))
+    if (any(xy[, 1] > cdfenv@nrow, na.rm = TRUE) || any(xy[, 2] > cdfenv@ncol, na.rm = TRUE))
       tmp[i] <- TRUE
   }
   if (n > 0 && sum(tmp) != 0)
@@ -105,6 +138,8 @@ validCdfEnvAffy <- function(cdfenv, verbose=TRUE) {
   attr(r, "details") <- r.details
   return(r)
 }
+
+## ---
 
 printValidCdfEnvAffy <- function(x) {
   printDetails <- function(y) {
@@ -132,6 +167,8 @@ printValidCdfEnvAffy <- function(x) {
   printDetails(r.details$xy)
 
 }
+
+## ---
 
 validAffyBatch <- function(abatch, cdfenv) {
   

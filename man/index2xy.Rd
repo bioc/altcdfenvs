@@ -1,8 +1,10 @@
 \name{index2xy}
 \alias{index2xy}
 \alias{index2xy.CdfEnvAffy}
+%\alias{index2xy.AltAffyBatch}
 \alias{xy2index}
 \alias{xy2index.CdfEnvAffy}
+%\alias{xy2index.AltAffyBatch}
 \title{ Functions to shuttle from indexes to XY coordinates }
 \description{
   Functions to shuttle from indexes to XY coordinates.
@@ -11,7 +13,9 @@
 index2xy(object, ...)
 xy2index(object, ...)
 index2xy.CdfEnvAffy(object, i)
+%index2xy.AltAffyBatch(object, i)
 xy2index.CdfEnvAffy(object, x, y)
+%xy2index.AltAffyBatch(object, x, y)
 }
 \arguments{
   \item{object}{An object of class \code{CdfEnvAffy}.}

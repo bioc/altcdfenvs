@@ -1,11 +1,13 @@
 \name{CdfEnvAffy-class}
 \docType{class}
 \alias{CdfEnvAffy-class}
+\alias{geneNames,CdfEnvAffy-method}
 \alias{index2xy,CdfEnvAffy-method}
 \alias{indexProbes,CdfEnvAffy,character-method}
 \alias{plot,CdfEnvAffy,missing-method}
 \alias{show,CdfEnvAffy-method}
 \alias{xy2index,CdfEnvAffy-method}
+\alias{coerce,CdfEnvAffy,environment-method}
 
 \title{Class "CdfEnvAffy"}
 \description{A class to hold the information necessary to handle the
@@ -21,6 +23,8 @@ Typically, there is an instance of the class for each type of chip
     \item{\code{envir}:}{Object of class \code{"environment"}. It has to
       be tought of as a hashtable: the keys are probe set identifiers,
       or gene names, and the values are indexes.}
+    \item{\code{envName}:}{Object of class \code{"character"}. A name
+      for the environment.}
     \item{\code{nrow}:}{Object of class \code{"integer"}. The number of
       rows of probes for the chip type.}
     \item{\code{ncol}:}{Object of class \code{"integer"}. The number of
@@ -37,10 +41,14 @@ Typically, there is an instance of the class for each type of chip
 }
 \section{Methods}{
   \describe{
-    \item{index2xy}{\code{signature(object = "CdfEnvAffy")}: convert
+    \item{coerce}{\code{signature(object = "CdfEnvAffy")}: corce an
+      instance of the class to an \code{enviroment}.}
+    \item{geneNames}{\code{signature(object="CdfEnvAffy")}: Return the
+    names of the known probe sets (of course, it depends on the associated CDF).}
+    \item{index2xy}{\code{signature(object = "CdfEnvAffy", i="integer")}: convert
       index values into XY coordinates.}
     \item{indexProbes}{\code{signature(object = "CdfEnvAffy", which =
-	"character", probeSetNames = NULL)}: obtain the indexes for the probes associated with
+	"character", probeSetNames = NULL)}: obtain the indexes for the probes associated wit
       the probe set name \code{probeSetNames}. When \code{probeSetNames}
       is set to \code{NULL} (default), the indexes are returned for the
       probe sets defined on the chip. See \code{indexProbes.CdfEnvAffy}}
@@ -48,7 +56,7 @@ Typically, there is an instance of the class for each type of chip
       the chip. It mainly sets coordinates for further plotting (see
       examples). See \code{plot.CdfEnvAffy}}
     \item{show}{\code{signature(object = "CdfEnvAffy")}: Print method.}
-    \item{xy2index}{\code{signature(object = "CdfEnvAffy")}: convert XY
+    \item{xy2index}{\code{signature(object = "CdfEnvAffy", x="integer", y="integer")}: convert XY
       coordinates into index values.}
   }
 }

@@ -1,0 +1,7 @@
+## A tab separated file to store chip characteristics
+Name	nrow	ncol
+HG-U95A	640	640
+HG-U95Av2	640	640
+MG-U74A		640	640
+MG-U74Av2	640	640
+

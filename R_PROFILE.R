@@ -1,2 +1,1 @@
-require(affy, quietly = TRUE)
-
+library(affy, pos=3)
