@@ -1,8 +1,8 @@
 Package: altcdfenvs
 Version: 1.2.0
 Title: alternative cdfenvs
-Author: Laurent Gautier <laurent@cbs.dtu.dk>
-Maintainer: Laurent Gautier <laurent@cbs.dtu.dk>
+Author: Laurent Gautier <lgautier@altern.org>
+Maintainer: Laurent Gautier <lgautier@altern.org>
 Depends: R (>= 1.9.0), Biobase, affy, matchprobes,
 Suggests: splicegear, plasmodiumanophelescdf, hgu95acdf, hgu133aprobe
 Description: Convenience data structures and functions to handle
