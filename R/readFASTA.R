@@ -71,7 +71,7 @@ read.n.FASTA.entries.split <- function(con, n, linebreaks=3000) {
   return(r)
 }
 
-countskip.FASTA.entries <- function(linebreaks=3000) {
+countskip.FASTA.entries <- function(con, linebreaks=3000) {
   ## skip and count the remaining FASTA entries in a connection
   ## (handy to count the entries in a FASTA file)
   ## return an integer
@@ -79,7 +79,7 @@ countskip.FASTA.entries <- function(linebreaks=3000) {
   fs <- read.FASTA.entry(con)
   while(!identical(fs$header, character(0)) && !identical(fs$sequence, NULL)) {
     i <- i+1
-    fs <- read.FASTA.entry(con)
+    fs <- read.FASTA.entry(con, linebreaks=linebreaks)
   }
   return(i)
 }
