@@ -15,7 +15,7 @@
   Set of function to work with biological sequences stored in FASTA format.
 }
 \usage{
-countskip.FASTA.entries(linebreaks = 3000)
+countskip.FASTA.entries(con, linebreaks = 3000)
 grep.FASTA.entry(pattern, con, ...)
 print.FASTA(x, ...)
 read.FASTA.entry(con, linebreaks = 3000)
