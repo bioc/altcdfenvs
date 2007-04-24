@@ -1,5 +1,5 @@
 Package: altcdfenvs
-Version: 1.9.1
+Version: 1.9.2
 Title: alternative cdfenvs
 Author: Laurent Gautier <lgautier@gmail.com>
 Maintainer: Laurent Gautier <lgautier@gmail.com>
@@ -9,7 +9,7 @@ Suggests: splicegear, plasmodiumanophelescdf, hgu95acdf, hgu133aprobe
 Description: Convenience data structures and functions to handle
         cdfenvs
 License: GPL version 2 or newer
-Collate: appendCdfEnvAffy.R buildCdfEnv.matchprobes.R buildCdfEnv.matchPattern.R CdfEnv.R
+Collate: appendCdfEnvAffy.R buildCdfEnv.matchprobes.R CdfEnv.R
         cdfenvs.R copyCdfEnvAffy.R readFASTA.R removeIndex.R
         unique.CdfEnvAffy.R zzz.R
 SaveImage: yes
