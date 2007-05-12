@@ -12,4 +12,4 @@ License: GPL version 2 or newer
 Collate: appendCdfEnvAffy.R buildCdfEnv.matchprobes.R CdfEnv.R
         cdfenvs.R copyCdfEnvAffy.R readFASTA.R removeIndex.R
         unique.CdfEnvAffy.R zzz.R
-SaveImage: yes
+LazyLoad: yes
