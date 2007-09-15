@@ -17,7 +17,7 @@
 \usage{
 countskip.FASTA.entries(con, linebreaks = 3000)
 grep.FASTA.entry(pattern, con, ...)
-print.FASTA(x, ...)
+\method{print}{FASTA}(x, ...)
 read.FASTA.entry(con, linebreaks = 3000)
 read.n.FASTA.entries(con, n, linebreaks = 3000)
 read.n.FASTA.entries.split(con, n, linebreaks = 3000)

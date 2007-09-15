@@ -5,7 +5,7 @@
   A function to set the axis and plot the outline for a CdfEnvAffy
 }
 \usage{
-plot.CdfEnvAffy(x, xlab = "", ylab = "", main = x@chipType, ...)
+\method{plot}{CdfEnvAffy}(x, xlab = "", ylab = "", main = x@chipType, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

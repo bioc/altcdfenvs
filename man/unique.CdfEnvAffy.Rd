@@ -5,7 +5,7 @@
   Remove duplicated elements from a CdfEnvAffy
 }
 \usage{
-unique.CdfEnvAffy(x, incomparables = FALSE, simplify = TRUE, verbose = FALSE, ...)
+\method{unique}{CdfEnvAffy}(x, incomparables = FALSE, simplify = TRUE, verbose = FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

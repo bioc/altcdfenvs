@@ -142,18 +142,18 @@ package \Rpackage{matchprobes} for further details):
 m <- matchprobes(my.entries$sequences, hgu133aprobe$sequence, probepos = TRUE)
 @ 
 
-If one wishes to have a graphical view on the matches, the package \Rpackage{splicegear}
-provides utilities to do so:
-<<fig=TRUE>>=
-library(splicegear)
+% If one wishes to have a graphical view on the matches, the package \Rpackage{splicegear}
+% provides utilities to do so:
+% <<fig=TRUE>>=
+% library(splicegear)
 
-probes.length <- nchar(hgu133aprobe$sequence[[1]])
+% probes.length <- nchar(hgu133aprobe$sequence[[1]])
 
-p <- matchprobes2Probes(m, probes.length)
+% p <- matchprobes2Probes(m, probes.length)
 
-plot(p[[1]])
-## or grid.plot(p[[1]])
-@ 
+% plot(p[[1]])
+% ## or grid.plot(p[[1]])
+% @ 
 
 The package contains a function to create a \Rclass{CdfEnv} from the matches:
 <<>>=
