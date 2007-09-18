@@ -18,7 +18,6 @@ Formal class 'CdfEnvAffy' [package "altcdfenvs"] with 8 slots
   ..@ probeTypes: chr [1:2] "pm" "mm"
   ..@ chipType  : chr "ZG-DU33"
 }
-}
 \examples{
 data(cdfenvEx)
 
