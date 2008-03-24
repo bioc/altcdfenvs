@@ -1,16 +1,11 @@
-The following bibliographic reference can be used to quote
-the package 'altcdfenvs':
-
-Alternative mapping of probes to genes for Affymetrix chips
+citEntry(entry = "Article",
+         "author" = "Laurent Gautier and Morten Mooller and Lennart Friis-Hansen and Steen Knudsen",
+         "title" = "Alternative mapping of probes to genes for {\it Affymetrix} chips",
+         journal = "BMC Bioinformatics",
+         year = "2004",
+         note = "5:111 (14 August 2004)",
+         textVersion = "Alternative mapping of probes to genes for Affymetrix chips
 Laurent Gautier, Morten Mooller, Lennart Friis-Hansen, Steen Knudsen
-BMC Bioinformatics 2004, 5:111 (14 August 2004)
+BMC Bioinformatics 2004, 5:111 (14 August 2004)"
+) 
 
-A BibTeX entry for LaTeX users is
-
-@article {
- title = {Alternative mapping of probes to genes for {\it Affymetrix} chips},
- author = {Laurent Gautier and Morten Mooller and Lennart Friis-Hansen and Steen Knudsen},
- journal = {BMC Bioinformatics},
- year = {2004},
- note = {5:111 (14 August 2004)}
-}
