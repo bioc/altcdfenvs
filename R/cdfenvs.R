@@ -25,7 +25,8 @@ getCdfEnvAffy <- function(abatch) {
 }
 
 
-getxy.probeseq <- function(ppset.id=NULL, probeseq=NULL, i.row=NULL, xy.offset=NULL,
+getxy.probeseq <- function(ppset.id=NULL, probeseq=NULL, i.row=NULL,
+                           xy.offset=NULL,
                            x.colname = "x", y.colname = "y") {
 
   if ( is.null(xy.offset) ) {

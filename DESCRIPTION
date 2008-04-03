@@ -1,15 +1,13 @@
 Package: altcdfenvs
-Version: 1.13.2
+Version: 1.13.3
 Title: alternative cdfenvs
 Author: Laurent Gautier <lgautier@gmail.com>
 Maintainer: Laurent Gautier <lgautier@gmail.com>
 biocViews: Microarray, OneChannel, QualityControl, Preprocessing, Annotation, ProprietaryPlatforms, Transcription
-Depends: R (>= 2.5), methods, Biobase, affy, matchprobes, makecdfenv
+Depends: R (>= 2.5), methods, Biobase, affy, matchprobes, makecdfenv, Biostrings
 Suggests: plasmodiumanophelescdf, hgu95acdf, hgu133aprobe
 Description: Convenience data structures and functions to handle
         cdfenvs
 License: GPL version 2 or newer
-Collate: appendCdfEnvAffy.R buildCdfEnv.matchprobes.R CdfEnv.R
-        cdfenvs.R copyCdfEnvAffy.R readFASTA.R removeIndex.R
-        unique.CdfEnvAffy.R zzz.R
+Collate: appendCdfEnvAffy.R buildCdfEnv.matchprobes.R buildCdfEnv.biostrings.R CdfEnv.R cdfenvs.R copyCdfEnvAffy.R readFASTA.R removeIndex.R unique.CdfEnvAffy.R zzz.R
 LazyLoad: yes
