@@ -47,7 +47,8 @@ getxy.probeseq <- function(ppset.id=NULL, probeseq=NULL, i.row=NULL,
   mm.offset[i.row < 0] <- 1
   i.row <- abs(i.row)
 
-  xy <- cbind(probeseq[[x.colname]][i.row], probeseq[[y.colname]][i.row] + mm.offset) + xy.offset
+  xy <- cbind(probeseq[[x.colname]][i.row],
+              probeseq[[y.colname]][i.row] + mm.offset) + xy.offset
   
   colnames(xy) <- c("x", "y")
   return(xy)

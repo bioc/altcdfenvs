@@ -34,32 +34,85 @@ mmProbes <- function(probes)
 
 
 setClass("AffyProbesMatch",
-         representation(pm = "list", mm = "list",
-                        labels = "character", chip_type = "character",
-                        probes = "ANY"), # should be class "probetable" - S4 don't seem to cope with it
-         validity = function(x) {
-           if (length(x@pm) != length(x@mm))
-             return("mm and pm should have identical lengths")
-           if (length(x@pm) != length(x@labels))
-             return("labels and pm should have identical lengths")
-           if (any(duplicated(x@labels)))
-             return("labels should be unique.")
-           if (length(x@chip_type) != 1)
-             return("chip_type should be *one* chip type name")
-           if (! all(lapply(x@pm, function(y) inherits(y, "ByPos_MIndex"))))
-             return("all pm should inherit from ByPos_MIndex")
-           if (! all(lapply(x@mm, function(y) inherits(y, "ByPos_MIndex"))))
-             return("all mm should inherit from ByPos_MIndex")
-           return(TRUE)
-         })
+ representation(pm = "list", mm = "list",
+                labels = "character", chip_type = "character",
+                probes = "ANY"), # should be class "probetable" - S4 don't seem to cope with it
+ validity = function(x) {
+   if (length(x@pm) != length(x@mm))
+     return("mm and pm should have identical lengths")
+   if (length(x@pm) != length(x@labels))
+     return("labels and pm should have identical lengths")
+   if (any(duplicated(x@labels)))
+     return("labels should be unique.")
+   if (length(x@chip_type) != 1)
+     return("chip_type should be *one* chip type name")
+   if (! all(unlist(lapply(x@pm,
+                           function(y) inherits(y, "integer"))))) {
+     return("all pm should inherit from numeric")
+   }
+   if (! all(unlist(lapply(x@mm,
+                           function(y) inherits(y, "integer"))))) {
+     return("all mm should inherit from numeric")
+   }
+   return(TRUE)
+ })
 
-## setMethod("merge", signaturex="AffyProbesMatch", y="AffyProbesMatch",
-##           function() {
-##
-##          })
+setMethod("combine",
+          signature = c("AffyProbesMatch", "AffyProbesMatch"),
+          function(x, y, ...) {
+            if (x@chip_type != y@chip_type)
+              stop("Both 'chip_type' must be identical.")
+            if (! identical(x@probes, y@probes))
+              stop("Both probe tables must be identical.")
+            pm <- c(x@pm, y@pm)
+            mm <- c(x@mm, y@mm)
+            labels <- c(x@labels, y@labels)
+            chip_type <- x@chip_type
+            probetable <- x@probes
+            res <- new("AffyProbesMatch",
+                       pm = pm, mm = mm,
+                       labels = labels,
+                       chip_type = chip_type,
+                       probes = probetable)
+            return(res)
+          })
 
+toHypergraph <-
+  function(obj, ...) {
+    stop("Not available for the given signature.")
+  }
+setGeneric("toHypergraph")
+setMethod("toHypergraph",
+          signature = c("AffyProbesMatch"),
+          function(obj, simplify=TRUE, ...) {
+            if (simplify) {
+              target_match <-
+                unlist(lapply(obj@pm, function(x) length(x) > 0))
+              probe_match <- rep(FALSE, length=nrow(obj@probes))
+               for (i in which(target_match)) {
+                 probe_match[obj@pm[[i]]] <- TRUE
+               }
+            } else {
+              target_match <- rep(TRUE, length=length(obj@pm))
+              probe_match <- rep(TRUE, length=nrow(obj@probes))
+            }
+                          
+            nodes <- as.character(seq(along=obj@probes[[1]])[probe_match])
+            
+            hEdges <- lapply(obj@pm[target_match],
+                             function(x) Hyperedge(as.character(x)))
+            names(hEdges) <- obj@labels[target_match]
+            hg <- new("Hypergraph",
+                      nodes = nodes,
+                      hyperedges = hEdges)
+            return(hg)
+          }
+          )
 
-matchAffyProbes <- function(probes, targets, chip_type)
+matchAffyProbes <-
+  function(probes, targets, chip_type,
+           matchmm = TRUE,
+           selectMatches = function(x) which(countIndex(x) > 0))
 {
 
   if (! inherits(probes, "probetable")) {
@@ -94,14 +147,18 @@ matchAffyProbes <- function(probes, targets, chip_type)
   pmdict <- PDict(stringset)
   mindex_pm <- vector("list", length = length(targets))
   for (ii in seq(along = targets)) {
-    mindex_pm[[ii]] <- matchPDict(pmdict, targets[[ii]])
+    md <- matchPDict(pmdict, targets[[ii]])
+    mindex_pm[[ii]] <- selectMatches(md)
   }
-  
-  mmseq <- mmProbes(probes)
-  mmdict <- PDict(mmseq)
+
   mindex_mm <- vector("list", length = length(targets))
-  for (ii in seq(along = targets)) {
-    mindex_mm[[ii]] <- matchPDict(mmdict, targets[[ii]])
+  if (matchmm) {
+    mmseq <- mmProbes(probes)
+    mmdict <- PDict(mmseq)
+    for (ii in seq(along = targets)) {
+      md <- matchPDict(mmdict, targets[[ii]])
+      mindex_mm[[ii]] <- selectMatches(md)
+    }
   }
   
   apm <- new("AffyProbesMatch", pm = mindex_pm, mm = mindex_mm,
@@ -114,12 +171,17 @@ matchAffyProbes <- function(probes, targets, chip_type)
 buildCdfEnv.biostrings <- function(apm, probes.pack,
                                    abatch=NULL,
                                    nrow.chip=NULL, ncol.chip=NULL,
-                                   chiptype=NULL, mm=NA, simplify = TRUE,
+                                   chiptype=NULL, simplify = TRUE,
                                    x.colname = "x", y.colname = "y",
-                                   verbose = FALSE) {
+                                   verbose = FALSE)
+{
 
+  if (verbose)
+    cat("validating 'apm'...")
   validObject(apm)
-
+  if (verbose)
+    cat("done.\n")
+  
   if ( ! is.null(abatch)) {
     if (! is(abatch, "AffyBatch"))
       stop("abatch must be of class 'AffyBatch'.")
@@ -141,18 +203,21 @@ buildCdfEnv.biostrings <- function(apm, probes.pack,
                barsteps = as.integer(20))
     open(pbt)
   }
+  ##FIXME:
+  warning("Check index for MM probes.")
   for (i in seq(along = apm@pm)) {
     if (verbose)
       update(pbt)
 
-    xy <- getxy.probeseq(probeseq=probetab,
-                         i.row=countIndex(apm@pm[[i]]) > 0,
+    xy <- getxy.probeseq(probeseq = probetab,
+                         i.row = apm@pm[[i]],
                          x.colname = x.colname, y.colname = y.colname)
     if (nrow(xy) == 0 && simplify) {
       next
     }
     assign(ids[i],
-           cbind(xy2indices(xy[, 1], xy[, 2], nr=nrow.chip), mm),
+           cbind(xy2indices(xy[, 1], xy[, 2], nr=nrow.chip),
+                 xy2indices(xy[, 1]+1, xy[, 2], nr=nrow.chip)),
            envir=cdfenv)
   }
   if (verbose)

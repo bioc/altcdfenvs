@@ -39,8 +39,13 @@ filename <- system.file("exampleData", "sample.fasta",
 
 fasta.seq <- readFASTA(filename)
 
+targets <- unlist(lapply(fasta.seq, "[[", "seq"))
+names(targets) <- lapply(fasta.seq, "[[", "desc")
+names(targets) <- sub("^>.+\\\|(NM[^ \\\|]+|Hs[^ \\\|]+)\\\|? .+$", "\\\1",
+                      names(targets))
+
 m <- matchAffyProbes(hgu133aprobe,
-                     unlist(lapply(fasta.seq, "[[", "seq")),
+                     targets,
                      "HG-U133A")
 
 # see the vignette for building a new environment from the begining
