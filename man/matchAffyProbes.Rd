@@ -1,25 +1,33 @@
 \name{matchAffyProbes}
 \alias{matchAffyProbes}
-
+\alias{mmProbes}
 \title{ Match the probes on an Affymetrix array }
 \description{
   Match the individual probes on an Affymetrix array to
   arbitrary targets.
 }
 \usage{
-matchAffyProbes(probes, targets, chip_type)
+mmProbes(probes)
+
+matchAffyProbes(probes, targets, chip_type,
+                matchmm = TRUE,
+                selectMatches = function(x) which(countIndex(x) > 0))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{probes}{ a \code{probetable} object }
   \item{targets}{ a vector of references }
   \item{chip_type}{a name for the chip type.}
+  \item{matchmm}{whether to match MM probes or not}
+  \item{selectMatches}{a function to select matches}
 }
 \details{
   
 }
 \value{
-  A two-items list:
+  \code{mmProbes} returns a vector of MM probe sequences.
+  
+  \code{matchAffyProbes} returns a two-items list:
   \item{pm}{list of matches for the PM probes (of class \code{MIndex})}
   \item{mm}{list of matches for the MM probes (of class \code{MIndex})}
 }

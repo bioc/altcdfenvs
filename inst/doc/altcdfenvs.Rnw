@@ -1,13 +1,12 @@
 % -*- mode: noweb; noweb-default-code-mode: R-mode; -*-
-%\VignetteIndexEntry{affy primer}
+%\VignetteIndexEntry{altcdfenvs}
 %\VignetteKeywords{Preprocessing, Affymetrix}
 %\VignetteDepends{altcdfenvs}
 %\VignettePackage{altcdfenvs}
-%documentclass[12pt, a4paper]{article}
 \documentclass[12pt]{article}
 
 \usepackage{amsmath,pstricks}
-\usepackage{hyperref}
+%\usepackage{hyperref}
 \usepackage[authoryear,round]{natbib}
 
 \textwidth=6.2in
@@ -39,7 +38,8 @@ the knowledge of expected transcripts for a given organism might have changed.
 Unless one includes the latest development in transcripts into
 an analysis, the analysis could suffer from what we like to call a
 {\it Dorian Gray}\footnote{From the novel `The Picture of
-  Dorian Gray' by Oscar Wilde.} effect. The chip itself does not change, which means
+  Dorian Gray' by Oscar Wilde.} effect. The chip itself does not change,
+ which means
 that the probes and their respective sequences remain the same, while
 the knowledge of the transcripts, and eventually their sequence, might
 evolve, and in time the immobility of the probe and probe sets give an
@@ -52,10 +52,17 @@ oligonucleotide arrays, and can be adapted or extended to other platforms.
 
 
 The bibliographic reference associated with the package is:
-<<label=citation>>=
+\begin{Scode}
 citation(package="altcdfenvs")
-@ 
-If you use it, consider citing it, as well as other packages it depends on. 
+\end{Scode}
+
+ Alternative mapping of probes to genes for Affymetrix chips Laurent
+  Gautier, Morten Mooller, Lennart Friis-Hansen, Steen Knudsen BMC
+  Bioinformatics 2004, 5:111
+
+If you use it, consider citing it, and
+if you cite it consider citing other packages it depends on
+as well. 
 
 Let's start by loading the package:
 <<>>=
@@ -67,13 +74,16 @@ Each instance of this class contains a way to group probes in probe sets.
 Different instances, describing different ways to group probes in
 probe sets, can co-exist for a given chip type.
 
-When experimenting, it is highly recommended to use the functions \Rfunction{validCdfEnvAffy}
-and \Rfunction{validAffyBatch} to make sure that the instance fullfils basic requirements for consistency. 
+When experimenting, it is highly recommended to use the functions 
+\Rfunction{validCdfEnvAffy}
+and \Rfunction{validAffyBatch} to make sure that the instance fullfils 
+basic requirements for consistency. 
 
 \section*{Reading sequence information in FASTA connections}
 The package contains simple functions to read {\bf R} connections in the FASTA
 format. Typically, collections of sequences are stored in FASTA files,
-which can be significantly large, one can wish to read and process sequences one after the other. This can
+which can be significantly large, one can wish to read and process 
+sequences one after the other. This can
 be done by opening the file in `r' mode:
 <<>>=
 fasta.filename <- system.file("exampleData", "sample.fasta",
@@ -96,11 +106,16 @@ One can foresee that the matching of a set of reference sequences against
 all the probes can be parallelized easily: the reference sequences can
 simply be distributed across different processors/machines. When
 working with all the reference sequences in a single large FASTA file,
-the option \Robject{skip} can let one implement a poor man's parallel sequence matching
+the option \Robject{skip} can let one implement a poor man's parallel 
+sequence matching
 very easily.
 
 \section*{Creating an alternative mapping from sequences in a FASTA file}
+
+
 \subsection*{Select the constituting elements}
+
+
 \begin{itemize}
 \item Chip type:
 For this tutorial we decide to work with the Affymetrix chip HG-U133A.
@@ -129,7 +144,6 @@ The package \Rpackage{matchprobes} and the probe data package for
 HG-U133A are required to perform the matching. The first step is
 to load them:
 <<>>=
-library(matchprobes)
 library(hgu133aprobe)
 
 @ 
@@ -137,34 +151,73 @@ library(hgu133aprobe)
 The matching is done simply (one can refer to the documentation for the
 package \Rpackage{matchprobes} for further details):
 <<>>=
-m <- matchprobes(my.entries$sequences, hgu133aprobe$sequence, probepos = TRUE)
+
+targets <- my.entries$sequences
+names(targets) <-  sub(">.+\\|(Hs\\#|NM_)([^[:blank:]\\|]+).+", 
+                       "\\1\\2", my.entries$headers)
+
+m <- matchAffyProbes(hgu133aprobe, targets, "HG-U133A")
+
+
 @ 
 
-% If one wishes to have a graphical view on the matches, the package \Rpackage{splicegear}
-% provides utilities to do so:
-% <<fig=TRUE>>=
-% library(splicegear)
 
-% probes.length <- nchar(hgu133aprobe$sequence[[1]])
+\subsection*{analyzing the matches}
 
-% p <- matchprobes2Probes(m, probes.length)
+When the position of the match between probes and target sequences
+does not matter, the association can be represented as a bipartite graph.
 
-% plot(p[[1]])
-% ## or grid.plot(p[[1]])
-% @ 
+The method \Rfunction{toHypergraph} will transform an instance of
+\Rclass{AffyProbesMatch} into an \Rclass{Hypergraph}.
+<<>>=
+hg <- toHypergraph(m)
+@ 
+
+Currently, there are not many functions implemented around hypergraphs,
+so we convert it to a more common graph.
+
+<<>>=
+gn <- toGraphNEL(hg)
+@ 
+
+Since this is now a regular graph, all of probes and targets are regular
+nodes on that graph. Node name-based rules can be applied to identify
+whether a node is a target sequence or a probe.
+
+<<>>=
+targetNodes <- new.env(hash=TRUE, parent=emptyenv())
+for (i in seq(along=targets)) {
+  targetNodes[[names(targets)[i]]] <- i
+}
+@ 
+
+
+Since the graph is relatively small, we can plot it:
+<<fig=TRUE>>=
+tShapes <- rep("ellipse", length=length(targets))
+names(tShapes) <- names(targets)
+tColors <- rep("ivory", length=length(targets))
+names(tColors) <- names(targets)
+
+nAttrs <- list(shape = tShapes, fillcolor = tColors)
+gAttrs <- list(node = list(shape = "rectangle", fixedsize = FALSE))
+
+plot(gn, "neato",
+     nodeAttrs = nAttrs,
+     attrs = gAttrs)
+@ 
+
+
+
+
 
 The package contains a function to create a \Rclass{CdfEnv} from the matches:
 <<>>=
-get.RNA.IDs <- function(x) {
-reg <- regexpr("(Hs#|NM)[^[:blank:]|]+", x)
-r <- substr(my.entries$headers, reg, reg+attr(reg, "match.length")-1)
-return(r)
-}
-ids <- get.RNA.IDs(my.entries$headers)
-alt.cdf <- buildCdfEnv.matchprobes(m, ids, 
-                                   nrow.chip = 712, ncol.chip = 712, 
-                                   chiptype = "HG-U133A",
-                                   probes.pack = "hgu133aprobe")
+
+alt.cdf <- 
+  buildCdfEnv.biostrings(m, ids, 
+                         nrow.chip = 712, ncol.chip = 712)
+
 @ 
 Note that the size for chip must be
 specified. This is currently a problem with cdfenvs as they are
@@ -173,7 +226,7 @@ created by the package \Rpackage{makecdfenv}. The class
 integrated in \Rpackage{makecdfenv} in the near future).
 When this happens, the section below will be replaced by something
 more intuitive. But in the meanwhile, here is the current way to use
-our shiny brand new \Rclass{CdfEnv}:
+our shiny brand new class \Rclass{CdfEnv}:
 
 \begin{Scode}
 ## say we have an AffyBatch of HG-U133A chips called 'abatch'

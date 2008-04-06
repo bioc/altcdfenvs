@@ -22,8 +22,8 @@ mmProbes <- function(probes)
   mmprobe <- rep(as.character(NA), length=length(pmprobe))
   mmprobe[grep("[Aa]", pmprobe)] <- "T"
   mmprobe[grep("[Tt]", pmprobe)] <- "A"
-  mmprobe[grep("[Gg]", pmprobe)] <- "G"
-  mmprobe[grep("[Cc]", pmprobe)] <- "C"
+  mmprobe[grep("[Gg]", pmprobe)] <- "C"
+  mmprobe[grep("[Cc]", pmprobe)] <- "G"
   mmseq <- paste(substr(probes$sequence, 1, mmpos-1),
                  mmprobe,
                  substr(probes$sequence, mmpos+1, nchar(probes$sequence)),
@@ -37,20 +37,20 @@ setClass("AffyProbesMatch",
  representation(pm = "list", mm = "list",
                 labels = "character", chip_type = "character",
                 probes = "ANY"), # should be class "probetable" - S4 don't seem to cope with it
- validity = function(x) {
-   if (length(x@pm) != length(x@mm))
+ validity = function(obj) {
+   if (length(obj@pm) != length(obj@mm))
      return("mm and pm should have identical lengths")
-   if (length(x@pm) != length(x@labels))
+   if (length(obj@pm) != length(obj@labels))
      return("labels and pm should have identical lengths")
-   if (any(duplicated(x@labels)))
+   if (any(duplicated(obj@labels)))
      return("labels should be unique.")
-   if (length(x@chip_type) != 1)
+   if (length(obj@chip_type) != 1)
      return("chip_type should be *one* chip type name")
-   if (! all(unlist(lapply(x@pm,
+   if (! all(unlist(lapply(obj@pm,
                            function(y) inherits(y, "integer"))))) {
      return("all pm should inherit from numeric")
    }
-   if (! all(unlist(lapply(x@mm,
+   if (! all(unlist(lapply(obj@mm,
                            function(y) inherits(y, "integer"))))) {
      return("all mm should inherit from numeric")
    }
@@ -108,6 +108,27 @@ setMethod("toHypergraph",
             return(hg)
           }
           )
+
+setMethod("toHypergraph",
+          signature = c("CdfEnvAffy"),
+          function(obj, ...)
+          {
+            nodes <- unlist(as.list(obj@envir), use.names = FALSE)
+            ##FIXME: implement common IDs
+            warning("Implementation not complete.")
+            nodes <- as.character(nodes)
+
+            targets <- ls(obj@envir)
+            hEdges <- vector("list", length = length(targets))
+            names(hEdges) <- targets
+            hEdges <- lapply(obj@envir,
+                             function(x) Hyperedge(as.character(x)))
+            
+            hg <- new("Hypergraph",
+                      nodes = nodes,
+                      hyperedges = hEdges)
+            return(hg)
+          })
 
 matchAffyProbes <-
   function(probes, targets, chip_type,
@@ -168,10 +189,11 @@ matchAffyProbes <-
 
 
 
-buildCdfEnv.biostrings <- function(apm, probes.pack,
+
+buildCdfEnv.biostrings <- function(apm,
                                    abatch=NULL,
                                    nrow.chip=NULL, ncol.chip=NULL,
-                                   chiptype=NULL, simplify = TRUE,
+                                   simplify = TRUE,
                                    x.colname = "x", y.colname = "y",
                                    verbose = FALSE)
 {
@@ -187,11 +209,11 @@ buildCdfEnv.biostrings <- function(apm, probes.pack,
       stop("abatch must be of class 'AffyBatch'.")
     nrow.chip <- abatch@nrow
     ncol.chip <- abatch@ncol
-    chiptype <- abatch@cdfName
+    chip_type <- abatch@cdfName
   }
 
-  if (is.null(nrow.chip) || is.null(ncol.chip) || is.null(chiptype))
-    stop("nrow.chip, ncol.chip or chiptype not defined.")
+  if (is.null(nrow.chip) || is.null(ncol.chip))
+    stop("nrow.chip, ncol.chip")
 
   probetab <- apm@probetab
   
@@ -215,7 +237,7 @@ buildCdfEnv.biostrings <- function(apm, probes.pack,
     if (nrow(xy) == 0 && simplify) {
       next
     }
-    assign(ids[i],
+    assign(apm@labels[i],
            cbind(xy2indices(xy[, 1], xy[, 2], nr=nrow.chip),
                  xy2indices(xy[, 1]+1, xy[, 2], nr=nrow.chip)),
            envir=cdfenv)
@@ -223,6 +245,6 @@ buildCdfEnv.biostrings <- function(apm, probes.pack,
   if (verbose)
     close(pbt)
 
-  cdfenv <- wrapCdfEnvAffy(cdfenv, nrow.chip, ncol.chip, chiptype)
+  cdfenv <- wrapCdfEnvAffy(cdfenv, nrow.chip, ncol.chip, chip_type)
   return(cdfenv)
 }

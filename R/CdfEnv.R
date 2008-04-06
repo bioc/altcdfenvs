@@ -1,4 +1,3 @@
-## Laurent Gautier 2003/2004
 
 
 index2xy.CdfEnvAffy <- function(object, i) {
@@ -59,7 +58,7 @@ setMethod("[", "CdfEnvAffy", function(x, i, j, ..., drop=FALSE) {
     }
     y <- x
     y@envName <- paste(x@envName, "-subsetXYcoords", sep="")
-    y@envir <- new.env(hash=TRUE)
+    y@envir <- new.env(hash=TRUE, parent = emptyenv())
     
     ## make a Cdf (faster lookup for XY or indexes).
     cdf <- as(cdfenv, "Cdf")
@@ -79,7 +78,7 @@ setMethod("[", "CdfEnvAffy", function(x, i, j, ..., drop=FALSE) {
     }
     y <- x
     y@envName <- paste(x@envName, "-subsetProbeSets", sep="")
-    y@envir <- new.env(hash=TRUE)
+    y@envir <- new.env(hash=TRUE, parent = emptyenv())
     
 
     for (id in i) {

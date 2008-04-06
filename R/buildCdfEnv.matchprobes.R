@@ -5,6 +5,8 @@ buildCdfEnv.matchprobes <- function(matches, ids, probes.pack,
                                     x.colname = "x", y.colname = "y",
                                     verbose = FALSE) {
 
+  .Deprecated("buildCdfEnv.biostrings", package="altcdfenvs")
+  
   if (! (is.list(matches) && length(matches) > 0)) #&& length(matches[[1]]) < 3)
     stop("arg 'matches' should be a list as returned by 'matchprobes'.")
 
