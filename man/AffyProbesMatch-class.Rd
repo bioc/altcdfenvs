@@ -2,10 +2,11 @@
 \docType{class}
 \alias{AffyProbesMatch-class}
 \alias{combine,AffyProbesMatch,AffyProbesMatch-method}
-
+\alias{show,AffyProbesMatch-method}
+\alias{toHypergraph,AffyProbesMatch-method}
 \title{Class "AffyProbesMatch"}
 \description{
-
+Store the results of a call to \code{matchAffyProbes}.
 }
 \section{Objects from the Class}{
 Objects can be created by calls of the form \code{new("AffyProbesMatch", ...)}.
@@ -30,8 +31,13 @@ matching probe sequences against target sequences.
 \section{Methods}{
   \describe{
     \item{combine}{\code{signature(x = "AffyProbesMatch", y =
-	"AffyProbesMatch")}: ...}
-    \item{toHypergraph}{\code{signature()obj = "AffyProbesMatch")}: ...}
+	"AffyProbesMatch")}: combine two instances. This is can
+      be useful when splitting the list of target sequences to
+      parallelized the job.}
+    \item{show}{\code{signature(x = "AffyProbesMatch")}:Show the
+      instance.}
+    \item{toHypergraph}{\code{signature(object = "AffyProbesMatch")}:
+    build an \code{\link[hypegraph]{Hypergraph}} from the matches.}
   }
 }
 %\references{ ~put references to the literature/web site here ~ }

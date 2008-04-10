@@ -6,7 +6,8 @@ mmProbes <- function(probes)
     stop(paste("Different length for probes",
                "(and the handling of that case is not implemented)."))
   if (len_probe != 25)
-    stop("The expected probe length is 25 bp.")
+    stop(paste("The expected probe length is 25 bp, not ",
+               len_probe, ".", sep=""))
   mmpos <- 13
 
 
@@ -57,6 +58,18 @@ setClass("AffyProbesMatch",
    return(TRUE)
  })
 
+setMethod("show",
+          signature = c("AffyProbesMatch"),
+          function(object) {
+            cat("AffyProbesMatch:\n")
+            cat(paste(length(object@pm),
+                      "target(s) sequences matched",
+                      "against", nrow(object@probes),
+                      "probes of chip type", object@chip_type,
+                      ".\n"))
+          }
+          )
+
 setMethod("combine",
           signature = c("AffyProbesMatch", "AffyProbesMatch"),
           function(x, y, ...) {
@@ -78,30 +91,30 @@ setMethod("combine",
           })
 
 toHypergraph <-
-  function(obj, ...) {
+  function(object, ...) {
     stop("Not available for the given signature.")
   }
 setGeneric("toHypergraph")
 setMethod("toHypergraph",
           signature = c("AffyProbesMatch"),
-          function(obj, simplify=TRUE, ...) {
+          function(object, simplify=TRUE, ...) {
             if (simplify) {
               target_match <-
-                unlist(lapply(obj@pm, function(x) length(x) > 0))
-              probe_match <- rep(FALSE, length=nrow(obj@probes))
+                unlist(lapply(object@pm, function(x) length(x) > 0))
+              probe_match <- rep(FALSE, length=nrow(object@probes))
                for (i in which(target_match)) {
-                 probe_match[obj@pm[[i]]] <- TRUE
+                 probe_match[object@pm[[i]]] <- TRUE
                }
             } else {
-              target_match <- rep(TRUE, length=length(obj@pm))
-              probe_match <- rep(TRUE, length=nrow(obj@probes))
+              target_match <- rep(TRUE, length=length(object@pm))
+              probe_match <- rep(TRUE, length=nrow(object@probes))
             }
                           
-            nodes <- as.character(seq(along=obj@probes[[1]])[probe_match])
+            nodes <- as.character(seq(along=object@probes[[1]])[probe_match])
             
-            hEdges <- lapply(obj@pm[target_match],
+            hEdges <- lapply(object@pm[target_match],
                              function(x) Hyperedge(as.character(x)))
-            names(hEdges) <- obj@labels[target_match]
+            names(hEdges) <- object@labels[target_match]
             hg <- new("Hypergraph",
                       nodes = nodes,
                       hyperedges = hEdges)
@@ -111,17 +124,17 @@ setMethod("toHypergraph",
 
 setMethod("toHypergraph",
           signature = c("CdfEnvAffy"),
-          function(obj, ...)
+          function(object, ...)
           {
-            nodes <- unlist(as.list(obj@envir), use.names = FALSE)
+            nodes <- unlist(as.list(object@envir), use.names = FALSE)
             ##FIXME: implement common IDs
             warning("Implementation not complete.")
             nodes <- as.character(nodes)
 
-            targets <- ls(obj@envir)
+            targets <- ls(object@envir)
             hEdges <- vector("list", length = length(targets))
             names(hEdges) <- targets
-            hEdges <- lapply(obj@envir,
+            hEdges <- lapply(object@envir,
                              function(x) Hyperedge(as.character(x)))
             
             hg <- new("Hypergraph",
@@ -133,7 +146,8 @@ setMethod("toHypergraph",
 matchAffyProbes <-
   function(probes, targets, chip_type,
            matchmm = TRUE,
-           selectMatches = function(x) which(countIndex(x) > 0))
+           selectMatches = function(x) which(countIndex(x) > 0),
+           ...)
 {
 
   if (! inherits(probes, "probetable")) {
@@ -168,7 +182,7 @@ matchAffyProbes <-
   pmdict <- PDict(stringset)
   mindex_pm <- vector("list", length = length(targets))
   for (ii in seq(along = targets)) {
-    md <- matchPDict(pmdict, targets[[ii]])
+    md <- matchPDict(pmdict, targets[[ii]], ...)
     mindex_pm[[ii]] <- selectMatches(md)
   }
 
@@ -177,7 +191,7 @@ matchAffyProbes <-
     mmseq <- mmProbes(probes)
     mmdict <- PDict(mmseq)
     for (ii in seq(along = targets)) {
-      md <- matchPDict(mmdict, targets[[ii]])
+      md <- matchPDict(mmdict, targets[[ii]], ...)
       mindex_mm[[ii]] <- selectMatches(md)
     }
   }
@@ -215,7 +229,7 @@ buildCdfEnv.biostrings <- function(apm,
   if (is.null(nrow.chip) || is.null(ncol.chip))
     stop("nrow.chip, ncol.chip")
 
-  probetab <- apm@probetab
+  probetab <- apm@probes
   
   cdfenv <- new.env(hash=TRUE)
 
@@ -245,6 +259,6 @@ buildCdfEnv.biostrings <- function(apm,
   if (verbose)
     close(pbt)
 
-  cdfenv <- wrapCdfEnvAffy(cdfenv, nrow.chip, ncol.chip, chip_type)
+  cdfenv <- wrapCdfEnvAffy(cdfenv, nrow.chip, ncol.chip, apm@chip_type)
   return(cdfenv)
 }

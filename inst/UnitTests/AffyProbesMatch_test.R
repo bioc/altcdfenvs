@@ -57,3 +57,7 @@ checkIdentical(combine(matchAffyProbes(probetable, targets[1:2], "foo"),
                        matchAffyProbes(probetable, targets[3], "foo")),
                matchAffyProbes(probetable, targets, "foo"))
 
+
+
+##
+

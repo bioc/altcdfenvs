@@ -5,7 +5,7 @@
 %\VignettePackage{altcdfenvs}
 \documentclass[12pt]{article}
 
-\usepackage{amsmath,pstricks}
+%\usepackage{amsmath,pstricks}
 %\usepackage{hyperref}
 \usepackage[authoryear,round]{natbib}
 
@@ -192,8 +192,10 @@ for (i in seq(along=targets)) {
 @ 
 
 
-Since the graph is relatively small, we can plot it:
-<<fig=TRUE>>=
+Since the graph is relatively small, we can plot it, and see that
+one probe is common to both probe sets:
+<<label=plotGraph, fig = TRUE>>=
+library(Rgraphviz)
 tShapes <- rep("ellipse", length=length(targets))
 names(tShapes) <- names(targets)
 tColors <- rep("ivory", length=length(targets))
@@ -205,18 +207,19 @@ gAttrs <- list(node = list(shape = "rectangle", fixedsize = FALSE))
 plot(gn, "neato",
      nodeAttrs = nAttrs,
      attrs = gAttrs)
+
 @ 
 
+Whenever a large number  oftarget sequences are involved, counting the degrees
+will be more efficient than plotting.
 
 
 
 
 The package contains a function to create a \Rclass{CdfEnv} from the matches:
 <<>>=
-
 alt.cdf <- 
-  buildCdfEnv.biostrings(m, ids, 
-                         nrow.chip = 712, ncol.chip = 712)
+  buildCdfEnv.biostrings(m, nrow.chip = 712, ncol.chip = 712)
 
 @ 
 Note that the size for chip must be
@@ -251,5 +254,46 @@ print(abatch)
 
 %\section*{Creating an alternative environment to store only perfect matches}
 
+\section{Always up-to-date}
+
+Even if alternative mapping is not used upstream of the analysis,
+it can still be interesting to verify probesets highlighted during
+data analysis. 
+
+The \Rpackage{biomaRt} package makes withdrawing up-to-date sequences
+very easy, and those sequences can be matched against the probes.
+
+
+<<>>=
+library(biomaRt)
+#mart <- useMart("ensembl",dataset="hsapiens_gene_ensembl")
+@
+
+<<>>=
+
+getSeq <- function(name) {
+  seq <- getSequence(id=name, type="hgnc_symbol", 
+                     seqType="cdna", mart = mart)
+
+  targets <- seq$cdna
+  if (is.null(targets))
+    return(character(0))
+  names(targets) <- paste(seq$hgnc_symbol, 1:nrow(seq), sep="-")
+  return(targets)
+}
+
+#targets <- unlist(lapply(c("SLAMF1", "SLAMF6", "SLAMF7", "SLAMF9"),
+#                         getSeq))
+
+#m <- matchAffyProbes(hgu133aprobe, targets, "HG-U133A")
+
+
+
+@  
+
+<<>>=
+#hg <- toHypergraph(m)
+#gn <- toGraphNEL(hg)
+@ 
 
 \end{document}

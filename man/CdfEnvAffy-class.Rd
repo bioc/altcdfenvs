@@ -9,6 +9,7 @@
 \alias{xy2index,CdfEnvAffy-method}
 \alias{coerce,CdfEnvAffy,environment-method}
 \alias{coerce,CdfEnvAffy,Cdf-method}
+\alias{toHypergraph,CdfEnvAffy-method}
 \alias{[,CdfEnvAffy-method}
 
 \title{Class "CdfEnvAffy"}
@@ -73,6 +74,8 @@ Typically, there is an instance of the class for each type of chip
       examples). See \code{plot.CdfEnvAffy}}
     \item{show}{\code{signature(object = "CdfEnvAffy")}: Print method.}
     \item{xy2index}{\code{signature(object = "CdfEnvAffy", x="integer", y="integer")}: convert XY
+      coordinates into index values.}
+    \item{toHypergraph}{\code{signature(object = "CdfEnvAffy")}: convert XY
       coordinates into index values.}
   }
 }

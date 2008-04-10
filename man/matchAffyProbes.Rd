@@ -11,7 +11,8 @@ mmProbes(probes)
 
 matchAffyProbes(probes, targets, chip_type,
                 matchmm = TRUE,
-                selectMatches = function(x) which(countIndex(x) > 0))
+                selectMatches = function(x) which(countIndex(x) > 0),
+                ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -19,25 +20,36 @@ matchAffyProbes(probes, targets, chip_type,
   \item{targets}{ a vector of references }
   \item{chip_type}{a name for the chip type.}
   \item{matchmm}{whether to match MM probes or not}
-  \item{selectMatches}{a function to select matches}
+  \item{selectMatches}{a function to select matches (see Details).}
+  \item{...}{further arguments to be passed to \code{matchPDict}.}
 }
 \details{
+  The matching is performed by the function
+  \code{\link[Biostrings]{matchPDict}}. The man page for that function
+    will indicate what are the options it accepts.
   
+  In the case where a large number targets are given, like when
+  each target represents a possible mRNA, is it expected to have a
+  largely sparce incidence matrix, that is a low number of probes
+  matching every target. For that reason, only the index of matching
+  probes are associated with each given target, with the function
+  \code{selectMatches} giving the definition of what are
+  matching probes. The default function just count anything matching,
+  but the user can specify a more stringent definition if wanted.
 }
 \value{
   \code{mmProbes} returns a vector of MM probe sequences.
   
-  \code{matchAffyProbes} returns a two-items list:
-  \item{pm}{list of matches for the PM probes (of class \code{MIndex})}
-  \item{mm}{list of matches for the MM probes (of class \code{MIndex})}
+  \code{matchAffyProbes} returns an instance of \code{AffyProbesMatch-class}.
 }
 \author{ Laurent Gautier }
 \note{
-
+%As outlined in Section Details, the structure can be 
 
 }
-\seealso{ \code{\link[Biostrings]{MIndex}}
-  and \code{\link{buildCdfEnv.biostrings}}}
+\seealso{ \code{\link[Biostrings]{matchPDict}} for details on how the
+    matching is performed, \code{\link{AffyProbesMatch-class}}
+    and \code{\link{buildCdfEnv.biostrings}}}
 \examples{
 
 library(hgu133aprobe)
@@ -56,8 +68,6 @@ m <- matchAffyProbes(hgu133aprobe,
                      targets,
                      "HG-U133A")
 
-# see the vignette for building a new environment from the begining
-# to the end
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
