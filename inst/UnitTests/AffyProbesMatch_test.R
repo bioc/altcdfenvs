@@ -1,3 +1,4 @@
+
 library(RUnit)
 
 library(altcdfenvs)
@@ -16,10 +17,10 @@ mm_4 <- "GGAGGGAGGGAGCGAGGGAGGGACT"
 
 probetable <-
   data.frame(sequence = I(c(pm_1, pm_2, pm_3, pm_4)),
-             x = c(100, 200, 300, 400),
-             y = c(100, 200, 300, 400),
+             x = c(1, 1, 3, 3),
+             y = c(1, 2, 1, 2),
              Probe.Set.Name = I(c("12_at", "12_at", "3_at", "m3_at")),
-             Probe.interrogation.Position = c(100, 200, 300, 400),
+             Probe.interrogation.Position = c(100, 120, 130, 140),
              Target.Strandeness = factor(rep("Antisense", 4)))
 
 class(probetable) <- c("data.frame", "probetable")
@@ -59,5 +60,23 @@ checkIdentical(combine(matchAffyProbes(probetable, targets[1:2], "foo"),
 
 
 
+## toHypergraph
+
+hg <- toHypergraph(apm)
+
+
+## test build env
+
+altCdf <- buildCdfEnv.biostrings(apm, nrow.chip = 4, ncol.chip = 4)
+
 ##
 
+checkIdentical(hg, toHypergraph(altCdf))
+
+
+altenv <- as(altCdf, "environment")
+
+
+#
+
+cdfenv <- new.env(hash = TRUE, parent=emptyenv())
