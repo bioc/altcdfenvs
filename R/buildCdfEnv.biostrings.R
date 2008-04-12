@@ -110,10 +110,13 @@ setMethod("toHypergraph",
               probe_match <- rep(TRUE, length=nrow(object@probes))
             }
                           
-            nodes <- as.character(seq(along=object@probes[[1]])[probe_match])
-            
+            nodes <-
+              paste(as.character(object@probes[["x"]][probe_match]),
+                    as.character(object@probes[["y"]][probe_match]),
+                    sep = "-")
+
             hEdges <- lapply(object@pm[target_match],
-                             function(x) Hyperedge(as.character(x)))
+                             function(x) Hyperedge(nodes[x]))
             names(hEdges) <- object@labels[target_match]
             hg <- new("Hypergraph",
                       nodes = nodes,
@@ -126,16 +129,18 @@ setMethod("toHypergraph",
           signature = c("CdfEnvAffy"),
           function(object, ...)
           {
-            nodes <- unlist(as.list(object@envir), use.names = FALSE)
-            ##FIXME: implement common IDs
-            warning("Implementation not complete.")
-            nodes <- as.character(nodes)
-
             targets <- ls(object@envir)
-            hEdges <- vector("list", length = length(targets))
-            names(hEdges) <- targets
-            hEdges <- lapply(object@envir,
-                             function(x) Hyperedge(as.character(x)))
+            nodesEnv <- new.env(hash=TRUE, parent=emptyenv())
+            for (n in targets) {
+              m <- object@envir[[n]]
+              labels <- apply(index2xy(object, m[, 1]), 1,
+                              function(x) paste(x, collapse="-"))   
+              nodesEnv[[n]] <- labels
+            }
+            nodes <- unlist(as.list(nodesEnv), use.names=FALSE)
+            nodes <- unique(nodes)
+            hEdges <- lapply(nodesEnv,
+                             function(x) Hyperedge(x))
             
             hg <- new("Hypergraph",
                       nodes = nodes,
