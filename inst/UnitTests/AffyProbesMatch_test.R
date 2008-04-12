@@ -9,17 +9,18 @@ mm_1 <- "AATAATAATAATTATAATAATAAGC"
 pm_2 <- "CCACCACCACCACCACCACCACCTG"
 mm_2 <- "CCACCACCACCAGCACCACCACCTG"
 
-pm_3 <- "TTATTATTATTATTATTATTATTGC"
-mm_3 <- "TTATTATTATTAATATTATTATTGC"
+pm_3 <- "GGAGGGAGGGAGGGAGGGAGGGACT"
+mm_3 <- "GGAGGGAGGGAGCGAGGGAGGGACT"
 
-pm_4 <- "GGAGGGAGGGAGGGAGGGAGGGACT"
-mm_4 <- "GGAGGGAGGGAGCGAGGGAGGGACT"
+pm_4 <- "TTATTATTATTATTATTATTATTGC"
+mm_4 <- "TTATTATTATTAATATTATTATTGC"
+
 
 probetable <-
   data.frame(sequence = I(c(pm_1, pm_2, pm_3, pm_4)),
-             x = c(1, 1, 3, 3),
-             y = c(1, 2, 1, 2),
-             Probe.Set.Name = I(c("12_at", "12_at", "3_at", "m3_at")),
+             x = c(10, 11, 13, 13),
+             y = c(10, 12, 11, 12),
+             Probe.Set.Name = I(c("12_at", "12_at", "m4_at", "4_at")),
              Probe.interrogation.Position = c(100, 120, 130, 140),
              Target.Strandeness = factor(rep("Antisense", 4)))
 
@@ -32,8 +33,8 @@ checkIdentical(c(mm_1, mm_2, mm_3, mm_4), mmp)
 
 
 target_1 <- paste(pm_1, pm_2, sep="GCGCG")
-target_2 <- paste(pm_1, pm_3, sep="GCGCG")
-target_3 <- paste("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG", mm_4, sep="")
+target_2 <- paste(pm_1, pm_4, sep="GCGCG")
+target_3 <- paste("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG", mm_3, sep="")
 
 targets <- list(t1 = DNAString(target_1),
                 t2 = DNAString(target_2),
@@ -45,11 +46,11 @@ apm <- matchAffyProbes(probetable, targets,
 
 
 checkIdentical(apm@pm[[1]], as.integer(c(1,2)))
-checkIdentical(apm@pm[[2]], as.integer(c(1,3)))
+checkIdentical(apm@pm[[2]], as.integer(c(1,4)))
 checkIdentical(apm@pm[[3]], integer(0))
 
 checkIdentical(apm@mm[[2]], integer(0))
-checkIdentical(apm@mm[[3]], as.integer(c(4)))
+checkIdentical(apm@mm[[3]], as.integer(c(3)))
 
 
 ## test merge
@@ -67,7 +68,7 @@ hg <- toHypergraph(apm)
 
 ## test build env
 
-altCdf <- buildCdfEnv.biostrings(apm, nrow.chip = 4, ncol.chip = 4)
+altCdf <- buildCdfEnv.biostrings(apm, nrow.chip = 15, ncol.chip = 15)
 
 ##
 

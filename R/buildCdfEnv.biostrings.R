@@ -109,15 +109,19 @@ setMethod("toHypergraph",
               target_match <- rep(TRUE, length=length(object@pm))
               probe_match <- rep(TRUE, length=nrow(object@probes))
             }
-                          
+
+            i_match <- rep(as.integer(NA), nrow(object@probes))
+            i_match[probe_match] <- seq(along=which(probe_match))
+            
             nodes <-
               paste(as.character(object@probes[["x"]][probe_match]),
                     as.character(object@probes[["y"]][probe_match]),
                     sep = "-")
 
             hEdges <- lapply(object@pm[target_match],
-                             function(x) Hyperedge(nodes[x]))
+                             function(x) Hyperedge(nodes[i_match[x]]))
             names(hEdges) <- object@labels[target_match]
+            
             hg <- new("Hypergraph",
                       nodes = nodes,
                       hyperedges = hEdges)
@@ -244,6 +248,7 @@ buildCdfEnv.biostrings <- function(apm,
                barsteps = as.integer(20))
     open(pbt)
   }
+
   ##FIXME:
   warning("Check index for MM probes.")
   for (i in seq(along = apm@pm)) {

@@ -76,8 +76,8 @@ probe sets, can co-exist for a given chip type.
 
 When experimenting, it is highly recommended to use the functions 
 \Rfunction{validCdfEnvAffy}
-and \Rfunction{validAffyBatch} to make sure that the instance fullfils 
-basic requirements for consistency. 
+and \Rfunction{validAffyBatch} to make sure that a given instance 
+is a valid one. 
 
 \section*{Reading sequence information in FASTA connections}
 The package contains simple functions to read {\bf R} connections in the FASTA
@@ -265,12 +265,15 @@ very easy, and those sequences can be matched against the probes.
 
 
 <<>>=
+geneSymbols <- c("SLAMF1", "SLAMF3", "SLAMF6", "SLAMF7", "SLAMF8", "SLAMF9")
+@ 
+
+\begin{Scode}
 library(biomaRt)
-#mart <- useMart("ensembl",dataset="hsapiens_gene_ensembl")
-@
+mart <- useMart("ensembl",dataset="hsapiens_gene_ensembl")
+\end{Scode}
 
 <<>>=
-
 getSeq <- function(name) {
   seq <- getSequence(id=name, type="hgnc_symbol", 
                      seqType="cdna", mart = mart)
@@ -281,19 +284,47 @@ getSeq <- function(name) {
   names(targets) <- paste(seq$hgnc_symbol, 1:nrow(seq), sep="-")
   return(targets)
 }
+@ 
+<<echo=FALSE>>=
+load(system.file("exampleData", "slamf_targets.RData",
+                  package="altcdfenvs"))
+@
 
-#targets <- unlist(lapply(c("SLAMF1", "SLAMF6", "SLAMF7", "SLAMF9"),
-#                         getSeq))
+\begin{Scode}
+targets <- unlist(lapply(geneSymbols,
+                         getSeq))
 
-#m <- matchAffyProbes(hgu133aprobe, targets, "HG-U133A")
-
-
-
-@  
+\end{Scode}
 
 <<>>=
-#hg <- toHypergraph(m)
-#gn <- toGraphNEL(hg)
+m <- matchAffyProbes(hgu133aprobe, targets, "HG-U133A")
+@ 
+
+
+<<label=SLAMF, fig=TRUE>>=
+
+hg <- toHypergraph(m)
+
+
+gn <- toGraphNEL(hg)
+
+library(RColorBrewer)
+col <- brewer.pal(length(geneSymbols)+1, "Set1")
+tColors <- rep(col[length(col)], length=numNodes(gn))
+names(tColors) <- nodes(gn)
+for (col_i in 1:(length(col)-1)) {
+  node_i <- grep(paste("^", geneSymbols[col_i], 
+                       "-", sep=""),
+                       names(tColors)) 
+  tColors[node_i] <- col[col_i]
+}
+
+
+nAttrs <- list(fillcolor = tColors)
+
+plot(gn, "twopi", nodeAttrs=nAttrs)
+
+
 @ 
 
 \end{document}
