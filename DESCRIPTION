@@ -1,11 +1,11 @@
 Package: altcdfenvs
-Version: 2.0.4
+Version: 2.0.5
 Title: alternative CDF environments (aka mappings)
 Author: Laurent Gautier <lgautier@gmail.com>
 Maintainer: Laurent Gautier <lgautier@gmail.com>
 biocViews: Microarray, OneChannel, QualityControl, Preprocessing, Annotation, ProprietaryPlatforms, Transcription
 Depends: R (>= 2.7), methods, Biobase, affy, matchprobes, makecdfenv, Biostrings, hypergraph
-Suggests: plasmodiumanophelescdf, hgu95acdf, hgu133aprobe, Rgraphviz
+Suggests: plasmodiumanophelescdf, hgu95acdf, hgu133aprobe, hgu133a.db, hgu133acdf, Rgraphviz
 Description: Convenience data structures and functions to handle
         cdfenvs
 License: GPL version 2 or newer

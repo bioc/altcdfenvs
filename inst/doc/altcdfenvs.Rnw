@@ -29,7 +29,9 @@
 \begin{document}
 \maketitle
 
-\section*{Introduction}
+\tableofcontents
+
+\section{Introduction}
 On short oligonuleotide arrays, several probes are designed to match
 a target transcript, and probes matching the same target transcript
 can be grouped in a probe set. Between the time the probes for a given short
@@ -69,7 +71,7 @@ Let's start by loading the package:
 library(altcdfenvs)
 @ 
 
-\section*{The class \Rclass{CdfEnvAffy}}
+\section{The class \Rclass{CdfEnvAffy}}
 Each instance of this class contains a way to group probes in probe sets.
 Different instances, describing different ways to group probes in
 probe sets, can co-exist for a given chip type.
@@ -79,7 +81,7 @@ When experimenting, it is highly recommended to use the functions
 and \Rfunction{validAffyBatch} to make sure that a given instance 
 is a valid one. 
 
-\section*{Reading sequence information in FASTA connections}
+\section{Reading sequence information in FASTA connections}
 The package contains simple functions to read {\bf R} connections in the FASTA
 format. Typically, collections of sequences are stored in FASTA files,
 which can be significantly large, one can wish to read and process 
@@ -110,10 +112,10 @@ the option \Robject{skip} can let one implement a poor man's parallel
 sequence matching
 very easily.
 
-\section*{Creating an alternative mapping from sequences in a FASTA file}
+\section{Creating an alternative mapping from sequences in a FASTA file}
 
 
-\subsection*{Select the constituting elements}
+\subsection{Select the constituting elements}
 
 
 \begin{itemize}
@@ -162,7 +164,7 @@ m <- matchAffyProbes(hgu133aprobe, targets, "HG-U133A")
 @ 
 
 
-\subsection*{analyzing the matches}
+\subsection{analyzing the matches}
 
 When the position of the match between probes and target sequences
 does not matter, the association can be represented as a bipartite graph.
@@ -217,7 +219,7 @@ will be more efficient than plotting.
 
 
 The package contains a function to create a \Rclass{CdfEnv} from the matches:
-<<>>=
+<<label=buildCdfEnv>>=
 alt.cdf <- 
   buildCdfEnv.biostrings(m, nrow.chip = 712, ncol.chip = 712)
 
@@ -263,17 +265,33 @@ data analysis.
 The \Rpackage{biomaRt} package makes withdrawing up-to-date sequences
 very easy, and those sequences can be matched against the probes.
 
-
-<<>>=
-geneSymbols <- c("SLAMF1", "SLAMF3", "SLAMF6", "SLAMF7", "SLAMF8", "SLAMF9")
-@ 
-
+First, we create a \emph{mart}:
 \begin{Scode}
 library(biomaRt)
 mart <- useMart("ensembl",dataset="hsapiens_gene_ensembl")
 \end{Scode}
+(refer to the documentation for the \Rpackage{biomaRt} for
+further information).
 
-<<>>=
+\subsection{Casual checking of genes}
+
+In this example, we assume that for one reason or an other
+a researcher would like to know more about the probes matching
+the SLAMF genes.
+
+<<label=geneSymbolsSLAMF>>=
+geneSymbols <- c("SLAMF1", "SLAMF3", "SLAMF6", "SLAMF7", "SLAMF8", "SLAMF9")
+@ 
+The vector \Robject{geneSymbols} defined can easily be replaced
+by your favorite genes; the example below should still work.
+
+
+We then write a convenience function 
+\Rcode{getSeq} to extract the sequences.
+This function appenda a \verb+-<number>+ to
+the HUGO symbol (as there might be several sequences
+matching).
+<<label=getSeq>>=
 getSeq <- function(name) {
   seq <- getSequence(id=name, type="hgnc_symbol", 
                      seqType="cdna", mart = mart)
@@ -285,22 +303,28 @@ getSeq <- function(name) {
   return(targets)
 }
 @ 
-<<echo=FALSE>>=
+
+% load saved data (instead of connecting to the mart)
+<<label=loadTargetsSLAMF, echo=FALSE>>=
 load(system.file("exampleData", "slamf_targets.RData",
                   package="altcdfenvs"))
 @
 
+The function let us obtain the target sequences very easily:
 \begin{Scode}
 targets <- unlist(lapply(geneSymbols,
                          getSeq))
 
 \end{Scode}
 
+The targets are matched as seen previously:
 <<>>=
 m <- matchAffyProbes(hgu133aprobe, targets, "HG-U133A")
 @ 
 
 
+A colorful graph can be made in order to visualize
+how matching probes are distributed:
 <<label=SLAMF, fig=TRUE>>=
 
 hg <- toHypergraph(m)
@@ -323,8 +347,29 @@ for (col_i in 1:(length(col)-1)) {
 nAttrs <- list(fillcolor = tColors)
 
 plot(gn, "twopi", nodeAttrs=nAttrs)
-
-
 @ 
+
+\begin{itemize}
+ \item Watch for \emph{SLAMF6} and \emph{SLAMF7}
+ \item The second sequence in SLAMF8 can potentially has specific probes
+(the rest of the probes are matching both SLAMF8 sequences)
+\end{itemize}
+
+
+Comparison with the official mapping can be made (not so simply,
+a future version should address this)
+<<>>=
+library("hgu133a.db")
+affyTab <- toTable(hgu133aSYMBOL)
+slamf_i <- grep("^SLAMF", affyTab$symbol)
+pset_id <- affyTab$probe_id[slamf_i]
+
+library("hgu133acdf")
+countProbes <- lapply(pset_id, function(x) nrow(hgu133acdf[[x]]))
+names(countProbes) <- affyTab$symbol[slamf_i]
+countProbes
+@ 
+The results do not appear in complete agreement with the matching just
+performed.
 
 \end{document}
