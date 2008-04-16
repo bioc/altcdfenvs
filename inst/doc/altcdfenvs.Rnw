@@ -53,20 +53,21 @@ The package is directly usable with {\it Affymetrix} {\it GeneChip} short
 oligonucleotide arrays, and can be adapted or extended to other platforms.
 
 
-The bibliographic reference associated with the package is:
+The bibliographic reference associated with the package is given by the command:
 \begin{Scode}
 citation(package="altcdfenvs")
 \end{Scode}
 
+\begin{quote}
  Alternative mapping of probes to genes for Affymetrix chips Laurent
   Gautier, Morten Mooller, Lennart Friis-Hansen, Steen Knudsen BMC
   Bioinformatics 2004, 5:111
+\end{quote}
 
 If you use it, consider citing it, and
-if you cite it consider citing other packages it depends on
-as well. 
+if you cite it consider citing as well other packages it depends on. 
 
-Let's start by loading the package:
+To start we will first load the package:
 <<>>=
 library(altcdfenvs)
 @ 
@@ -287,7 +288,7 @@ by your favorite genes; the example below should still work.
 
 
 We then write a convenience function 
-\Rcode{getSeq} to extract the sequences.
+\Robject{getSeq} to extract the sequences.
 This function appenda a \verb+-<number>+ to
 the HUGO symbol (as there might be several sequences
 matching).
