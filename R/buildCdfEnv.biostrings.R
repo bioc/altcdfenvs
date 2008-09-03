@@ -16,8 +16,8 @@ mmProbes <- function(probes)
   ##  mmseq <-
   ##     lapply(as.list(probes$stringset),
   ##            function(x) {
-  ##              replaceLetterAtLoc(x, mmpos,
-  ##                                 as.character(complement(x[mmpos])))
+  ##              replaceLetterAt(x, mmpos,
+  ##                              as.character(complement(x[mmpos])))
   ##            })
   pmprobe <- substr(probes$sequence, mmpos, mmpos)
   mmprobe <- rep(as.character(NA), length=length(pmprobe))
