@@ -3,9 +3,8 @@ citEntry(entry = "Article",
          "title" = "Alternative mapping of probes to genes for {\\it Affymetrix} chips",
          journal = "BMC Bioinformatics",
          year = "2004",
-         note = "5:111 (14 August 2004)",
+         note = "5:111 (14 August 2004)",
          textVersion = "Alternative mapping of probes to genes for Affymetrix chips
 Laurent Gautier, Morten Mooller, Lennart Friis-Hansen, Steen Knudsen
-BMC Bioinformatics 2004, 5:111 (14 August 2004)"
+BMC Bioinformatics 2004, 5:111 (14 August 2004)"
 ) 
-
