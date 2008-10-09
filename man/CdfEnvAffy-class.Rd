@@ -10,7 +10,7 @@
 \alias{coerce,CdfEnvAffy,environment-method}
 \alias{coerce,CdfEnvAffy,Cdf-method}
 \alias{toHypergraph,CdfEnvAffy-method}
-\alias{[,CdfEnvAffy, character, missing, missing-method}
+\alias{[,CdfEnvAffy,character,missing,missing-method}
 
 \title{Class "CdfEnvAffy"}
 \description{A class to hold the information necessary to handle the
