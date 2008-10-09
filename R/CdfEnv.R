@@ -46,21 +46,24 @@ geneNames.CdfEnvAffy <- function(object) {
 setMethod("geneNames", "CdfEnvAffy", geneNames.CdfEnvAffy)
 
 ## ---
-setMethod("[", "CdfEnvAffy", function(x, i, j, ..., drop=FALSE) {
+setMethod("[", signature(x="CdfEnvAffy", i="character",
+                         j="missing", drop="missing"),
+function(x, i, j, drop=FALSE) {
   if( !missing(j)) {
     stop("Improper subsetting. Only one vector of IDs should be given.\n")
   }
-
+  
   if (is.matrix(i)) {
     if (! is.integer(i)) {
       stop("not implemented")
-      ##stop("when a matrix, 'i' should be of mode 'integer'")
+         ##stop("when a matrix, 'i' should be of mode 'integer'")
     }
     y <- x
     y@envName <- paste(x@envName, "-subsetXYcoords", sep="")
     y@envir <- new.env(hash=TRUE, parent = emptyenv())
     
     ## make a Cdf (faster lookup for XY or indexes).
+    cdfenv <- get(x@envName)
     cdf <- as(cdfenv, "Cdf")
     idx <- xy2index(x, i)
     for (i in idx) {

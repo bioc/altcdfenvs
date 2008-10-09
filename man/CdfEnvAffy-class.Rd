@@ -10,7 +10,7 @@
 \alias{coerce,CdfEnvAffy,environment-method}
 \alias{coerce,CdfEnvAffy,Cdf-method}
 \alias{toHypergraph,CdfEnvAffy-method}
-\alias{[,CdfEnvAffy-method}
+\alias{[,CdfEnvAffy, character, missing, missing-method}
 
 \title{Class "CdfEnvAffy"}
 \description{A class to hold the information necessary to handle the
@@ -24,7 +24,7 @@ Typically, there is an instance of the class for each type of chip
 \section{Slots}{
   \describe{
     \item{\code{envir}:}{Object of class \code{"environment"}. It has to
-      be tought of as a hashtable: the keys are probe set identifiers,
+      be thought of as a hashtable: the keys are probe set identifiers,
       or gene names, and the values are indexes.}
     \item{\code{envName}:}{Object of class \code{"character"}. A name
       for the environment.}
@@ -52,7 +52,8 @@ Typically, there is an instance of the class for each type of chip
 }
 \section{Methods}{
   \describe{
-    \item{[}{\code{signature(object = "CdfEnvAffy")}: subset a cdf, that
+    \item{[}{\code{signature(object = "CdfEnvAffy",
+	i = "character", j = "missing", drop = "boolean")}: subset a cdf, that
       is return a new cdf containing only a subset of the probe
       sets. The subset of probe sets to take is identified as a vector
       of identifiers (mode "character").}
