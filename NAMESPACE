@@ -1,0 +1,8 @@
+
+importFrom(graphics, plot)
+
+importFrom("Biobase", "combine")
+importFrom("Biobase", "geneNames")
+importFrom("affy", "indexProbes")
+
+exportPattern("^[^\\.]")
