@@ -86,7 +86,7 @@ function(x, i, j, drop=FALSE) {
 
     for (id in i) {
       ##tmp <- indexProbes(x, x@probeTypes, id)
-      tmp <- do.call("cbind", lapply(x@probeTypes, function(pt) indexProbes(x, pt, id)[[1]]))
+      tmp <- do.call(cbind, lapply(x@probeTypes, function(pt) indexProbes(x, pt, id)[[1]]))
       assign(id, tmp, envir=y@envir)
     }
   }

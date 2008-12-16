@@ -27,7 +27,7 @@ buildCdfEnv.matchprobes <- function(matches, ids, probes.pack,
   if (is.null(nrow.chip) || is.null(ncol.chip) || is.null(chiptype))
     stop("nrow.chip, ncol.chip or chiptype not defined.")
 
-  do.call("library", list(probes.pack))
+  do.call(library, list(probes.pack))
   probe.tab <- get(probes.pack, envir=as.environment(paste("package:", probes.pack, sep="")))
 
   cdfenv <- new.env(hash=TRUE)
