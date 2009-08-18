@@ -30,7 +30,7 @@ matchAffyProbes(probes, targets, chip_type,
   
   In the case where a large number targets are given, like when
   each target represents a possible mRNA, is it expected to have a
-  largely sparce incidence matrix, that is a low number of probes
+  largely sparse incidence matrix, that is a low number of probes
   matching every target. For that reason, only the index of matching
   probes are associated with each given target, with the function
   \code{selectMatches} giving the definition of what are
@@ -61,7 +61,7 @@ fasta.seq <- readFASTA(filename)
 
 targets <- unlist(lapply(fasta.seq, "[[", "seq"))
 names(targets) <- lapply(fasta.seq, "[[", "desc")
-names(targets) <- sub("^>.+\\\|(NM[^ \\\|]+|Hs[^ \\\|]+)\\\|? .+$", "\\\1",
+names(targets) <- sub("^>.+\\\\|(NM[^ \\\\|]+|Hs[^ \\\\|]+)\\\\| ? .+$", "",
                       names(targets))
 
 m <- matchAffyProbes(hgu133aprobe,

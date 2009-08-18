@@ -42,7 +42,7 @@ Typically, there is an instance of the class for each type of chip
       columns of probes for the chip type.}
     \item{\code{probeTypes}:}{Object of class \code{"character"}. The
       different types of probes stored for each probe set. In the case
-      of {\it Affymetrix} chips, the probes are typically perfect match
+      of Affymetrix chips, the probes are typically perfect match
       (pm) probes or mismatch probes (mm).}
     \item{\code{chipType}:}{Object of class \code{"character"}. The name
       of the chip type the instance is associated with. This is useful
@@ -58,7 +58,7 @@ Typically, there is an instance of the class for each type of chip
       sets. The subset of probe sets to take is identified as a vector
       of identifiers (mode "character").}
     \item{coerce}{\code{signature(object = "CdfEnvAffy", "environment")}: coerce an
-      instance of the class to an \code{enviroment}.}
+      instance of the class to an \code{environment}.}
     \item{coerce}{\code{signature(object = "CdfEnvAffy", "Cdf")}: coerce an
       instance of the class to a \code{Cdf}.}
     \item{geneNames}{\code{signature(object="CdfEnvAffy")}: Return the
