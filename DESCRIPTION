@@ -1,5 +1,5 @@
 Package: altcdfenvs
-Version: 2.7.1
+Version: 2.7.2
 Title: alternative CDF environments (aka probeset mappings)
 Author: Laurent Gautier <lgautier@gmail.com>
 Maintainer: Laurent Gautier <lgautier@gmail.com>
@@ -8,6 +8,6 @@ Depends: R (>= 2.7), methods, Biobase, affy, matchprobes, makecdfenv, Biostrings
 Suggests: plasmodiumanophelescdf, hgu95acdf, hgu133aprobe, hgu133a.db, hgu133acdf, Rgraphviz, RColorBrewer
 Description: Convenience data structures and functions to handle
         cdfenvs
-License: GPL version 2 or newer
+License: GPL (>= 2)
 Collate: appendCdfEnvAffy.R buildCdfEnv.matchprobes.R buildCdfEnv.biostrings.R CdfEnv.R cdfenvs.R copyCdfEnvAffy.R readFASTA.R removeIndex.R unique.CdfEnvAffy.R zzz.R
 LazyLoad: yes
