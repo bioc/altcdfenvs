@@ -13,6 +13,6 @@ toHypergraph(object, ...)
   \item{...}{Unused.}
 }
 \value{
-  An \code{\link[hypergraph]{Hypergraph}}
+  An \code{\link[hypergraph]{Hypergraph-class}} object. 
 }
 \keyword{manip}

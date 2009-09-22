@@ -31,7 +31,7 @@ indexProbes.CdfEnvAffy(object, which, probeSetNames = NULL)
 \value{
 A \code{list} of indexes.
 }
-\seealso{\code{\link{CdfEnvAffy-class}}, \code{\link[affyr]{AltAffyBatch-class} }}
+\seealso{\code{\link{CdfEnvAffy-class}}, \code{\link[affy]{AffyBatch-class} }}
 \examples{
 
 }

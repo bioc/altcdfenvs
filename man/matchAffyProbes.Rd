@@ -25,8 +25,8 @@ matchAffyProbes(probes, targets, chip_type,
 }
 \details{
   The matching is performed by the function
-  \code{\link[Biostrings]{matchPDict}}. The man page for that function
-    will indicate what are the options it accepts.
+  \code{\link[Biostrings:matchPDict-exact]{matchPDict}}. The man page
+  for that function will indicate what are the options it accepts.
   
   In the case where a large number targets are given, like when
   each target represents a possible mRNA, is it expected to have a
@@ -47,8 +47,8 @@ matchAffyProbes(probes, targets, chip_type,
 %As outlined in Section Details, the structure can be 
 
 }
-\seealso{ \code{\link[Biostrings]{matchPDict}} for details on how the
-    matching is performed, \code{\link{AffyProbesMatch-class}}
+\seealso{ \code{\link[Biostrings:matchPDict-exact]{matchPDict}} for
+  details on how the matching is performed, \code{\link{AffyProbesMatch-class}}
     and \code{\link{buildCdfEnv.biostrings}}}
 \examples{
 
