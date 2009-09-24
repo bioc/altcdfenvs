@@ -37,7 +37,7 @@ matching probe sequences against target sequences.
     \item{show}{\code{signature(x = "AffyProbesMatch")}:Show the
       instance.}
     \item{toHypergraph}{\code{signature(object = "AffyProbesMatch")}:
-    build an \code{\link[hypegraph]{Hypergraph}} from the matches.}
+    build an \code{\link[hypergraph]{Hypergraph}} from the matches.}
   }
 }
 %\references{ ~put references to the literature/web site here ~ }
