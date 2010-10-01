@@ -15,9 +15,7 @@ countduplicated(x, incomparables = FALSE, verbose = FALSE)
   \item{incomparables}{ (not implemented yet, keep away) }
   \item{verbose}{ verbose or not }
 }
-\details{
- 
-}
+
 \value{
   An \code{environment} is returned. Each element in this
   \code{environment} has the same identifier than its corresponding
@@ -27,6 +25,5 @@ countduplicated(x, incomparables = FALSE, verbose = FALSE)
 }
 \author{ Laurent }
 \seealso{ \code{\link{CdfEnvAffy-class}}}
-\examples{
-}
+
 \keyword{ manip }

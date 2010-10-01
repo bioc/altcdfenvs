@@ -23,15 +23,10 @@ xy2index.CdfEnvAffy(object, x, y)
   \item{x, y}{Vectors of X and Y coordinates.}
   \item{\dots}{Optional parameters (not used).}
 }
-\details{
-  
-}
 \value{
   A vector of integers (for \code{xy2index} methods), or a matrix of two
   columns (for \code{index2xy} methods).
 }
-\section{Warning }{}
-
 \seealso{ \code{\link{CdfEnvAffy-class}}}
 \examples{
 ## To be done...

@@ -42,7 +42,7 @@ while the second column contains y coordinates.
   and similar. Here the the XY coordinate come from a \code{data.frame}
   that stores information about an arbitrary number probes on the
   chip. (See the `probe sequence' data packages on Bioconductor, and the
-  package \code{matchprobes}).
+  package \code{Biostrings}).
   
   The methods \code{index2xy} are meant to interact with instances of
   class \code{AffyBatch}.

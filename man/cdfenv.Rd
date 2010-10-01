@@ -23,7 +23,7 @@ buildCdfEnv.matchprobes(matches, ids, probes.pack, abatch=NULL,
   \item{chiptype}{A name for the chip type}
   \item{ids}{a vector of probe set identifiers for the matches}
   \item{matches}{a list as returned by the function
-    \code{\link[matchprobes]{combineAffyBatch}}}
+    \code{combineAffyBatch}}
   \item{mm}{The value to store for MMs}
   \item{ncol.chip}{The number of columns for the chip type}
   \item{nrow.chip}{The number of rows for the chip type}

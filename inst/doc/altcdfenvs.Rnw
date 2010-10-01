@@ -143,7 +143,7 @@ close(con)
 
 
 \subsection*{matching the probes}
-The package \Rpackage{matchprobes} and the probe data package for
+The package \Rpackage{Biostrings} and the probe data package for
 HG-U133A are required to perform the matching. The first step is
 to load them:
 <<>>=
@@ -152,7 +152,7 @@ library(hgu133aprobe)
 @ 
 
 The matching is done simply (one can refer to the documentation for the
-package \Rpackage{matchprobes} for further details):
+package \Rpackage{Biostrings} for further details):
 <<>>=
 
 targets <- my.entries$sequences

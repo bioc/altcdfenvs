@@ -32,7 +32,4 @@ indexProbes.CdfEnvAffy(object, which, probeSetNames = NULL)
 A \code{list} of indexes.
 }
 \seealso{\code{\link{CdfEnvAffy-class}}, \code{\link[affy]{AffyBatch-class} }}
-\examples{
-
-}
 \keyword{ manip }

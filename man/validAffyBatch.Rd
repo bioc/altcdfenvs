@@ -21,9 +21,6 @@ printValidCdfEnvAffy(x)
   The function \code{validAffyBatch} calls in turn
   \code{validCdfEnvAffy}.
 }
-\value{
-
-}
 \seealso{ \code{\link[affy]{AffyBatch-class}}, \code{\link{CdfEnvAffy-class}} }
 \examples{
 ## To be done...

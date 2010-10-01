@@ -43,10 +43,7 @@ matchAffyProbes(probes, targets, chip_type,
   \code{matchAffyProbes} returns an instance of \code{AffyProbesMatch-class}.
 }
 \author{ Laurent Gautier }
-\note{
-%As outlined in Section Details, the structure can be 
 
-}
 \seealso{ \code{\link[Biostrings:matchPDict-exact]{matchPDict}} for
   details on how the matching is performed, \code{\link{AffyProbesMatch-class}}
     and \code{\link{buildCdfEnv.biostrings}}}
