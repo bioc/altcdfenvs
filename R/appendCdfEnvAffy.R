@@ -15,7 +15,7 @@ appendCdfEnvAffy <- function(acdfenv, id, i, nocopy=TRUE) {
     acdfenv <- copyCdfEnvAffy(acdfenv)
   }
 
-  m <- matrix(as.integer(NA), nr=nrow(i), nc=length(acdfenv@probeTypes))
+  m <- matrix(as.integer(NA), nrow=nrow(i), ncol=length(acdfenv@probeTypes))
   m[, tmp.m] <- i
   
   ##DEBUG: a consistency check (i.e., the index make sense given the
