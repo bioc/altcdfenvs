@@ -2,7 +2,6 @@
 importFrom(graphics, plot)
 
 importFrom("BiocGenerics", "combine")
-importFrom("Biobase", "geneNames")
 importFrom("affy", "indexProbes")
 
 exportPattern("^[^\\.]")
