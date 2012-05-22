@@ -54,10 +54,9 @@ library(hgu133aprobe)
 filename <- system.file("exampleData", "sample.fasta",
                         package="altcdfenvs")
 
-fasta.seq <- readFASTA(filename)
+fasta.seq <- readDNAStringSet(filename)
 
-targets <- unlist(lapply(fasta.seq, "[[", "seq"))
-names(targets) <- lapply(fasta.seq, "[[", "desc")
+targets <- as.character(fasta.seq)
 names(targets) <- sub("^>.+\\\\|(NM[^ \\\\|]+|Hs[^ \\\\|]+)\\\\| ? .+$", "",
                       names(targets))
 
