@@ -47,7 +47,7 @@ buildCdfEnv.matchprobes <- function(matches, ids, probes.pack,
       next
     }
     assign(ids[i],
-           cbind(xy2indices(xy[, 1], xy[, 2], nr=nrow.chip), mm),
+           cbind(xy2indices(xy[, 1], xy[, 2], nc=nrow.chip), mm),
            envir=cdfenv)
   }
   if (verbose)

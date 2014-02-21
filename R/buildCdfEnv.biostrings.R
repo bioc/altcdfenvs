@@ -262,8 +262,8 @@ buildCdfEnv.biostrings <- function(apm,
       next
     }
     assign(apm@labels[i],
-           cbind(xy2indices(xy[, 1], xy[, 2], nr=nrow.chip),
-                 xy2indices(xy[, 1]+1, xy[, 2], nr=nrow.chip)),
+           cbind(xy2indices(xy[, 1], xy[, 2], nc=nrow.chip),
+                 xy2indices(xy[, 1]+1, xy[, 2], nc=nrow.chip)),
            envir=cdfenv)
   }
   if (verbose)

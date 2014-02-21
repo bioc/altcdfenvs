@@ -5,7 +5,7 @@ index2xy.CdfEnvAffy <- function(object, i) {
 }
 xy2index.CdfEnvAffy <- function(object, x, y) {
   o <- getOption("BioC")$affy$xy.offset
-  xy2indices(x+o, y+o, nr = object@nrow)
+  xy2indices(x+o, y+o, nc = object@nrow)
 }
 
 setClass("CdfEnvAffy",
