@@ -155,7 +155,7 @@ setMethod("toHypergraph",
 matchAffyProbes <-
   function(probes, targets, chip_type,
            matchmm = TRUE,
-           selectMatches = function(x) which(countIndex(x) > 0),
+           selectMatches = function(x) which(elementLengths(x) > 0),
            ...)
 {
 

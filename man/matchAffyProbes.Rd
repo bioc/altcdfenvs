@@ -11,7 +11,7 @@ mmProbes(probes)
 
 matchAffyProbes(probes, targets, chip_type,
                 matchmm = TRUE,
-                selectMatches = function(x) which(countIndex(x) > 0),
+                selectMatches = function(x) which(elementLengths(x) > 0),
                 ...)
 }
 %- maybe also 'usage' for other objects documented here.
