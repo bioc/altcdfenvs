@@ -1,12 +1,12 @@
 Package: altcdfenvs
-Version: 2.33.0
+Version: 2.33.1
 Title: alternative CDF environments (aka probeset mappings)
 Author: Laurent Gautier <lgautier@gmail.com>
 Maintainer: Laurent Gautier <lgautier@gmail.com>
 biocViews: Microarray, OneChannel, QualityControl, Preprocessing,
         Annotation, ProprietaryPlatforms, Transcription
-Depends: R (>= 2.7), methods, BiocGenerics (>= 0.1.0), Biobase (>=
-        2.15.1), affy, makecdfenv, Biostrings, hypergraph
+Depends: R (>= 2.7), methods, BiocGenerics (>= 0.1.0), S4Vectors (>= 0.9.25),
+        Biobase (>= 2.15.1), affy, makecdfenv, Biostrings, hypergraph
 Suggests: plasmodiumanophelescdf, hgu95acdf, hgu133aprobe, hgu133a.db,
         hgu133acdf, Rgraphviz, RColorBrewer
 Description: Convenience data structures and functions to handle

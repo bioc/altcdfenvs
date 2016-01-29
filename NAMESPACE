@@ -2,6 +2,7 @@
 importFrom(graphics, plot)
 
 importFrom("BiocGenerics", "combine")
+import(S4Vectors)
 importFrom("affy", "indexProbes")
 
 exportPattern("^[^\\.]")
