@@ -1,5 +1,5 @@
 % -*- mode: noweb; noweb-default-code-mode: R-mode; -*-
-%\VignetteIndexEntry{affy primer}
+%\VignetteIndexEntry{Modifying existing CDF environments to make alternative CDF environments}
 %\VignetteKeywords{Preprocessing, Affymetrix}
 %\VignetteDepends{altcdfenvs}
 %\VignettePackage{altcdfenvs}
